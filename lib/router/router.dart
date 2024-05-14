@@ -1,14 +1,14 @@
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/HomePage.dart';
-import 'package:regapp/ui/SplashPage.dart';
+import 'package:regapp/ui/NewUserPage.dart';
 
 // GoRouter configuration
 final router = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: '/newUser',
   routes: [
     GoRoute(
-      path: '/splash',
-      builder: (context, state) => const SplashPage(),
+      path: '/newUser',
+      builder: (context, state) => const NewUserPage(),
     ),
     GoRoute(
       path: '/',
