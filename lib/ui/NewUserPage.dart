@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:regapp/ui/CreateAccount.dart';
+import 'package:regapp/ui/HomePage.dart';
 
 class NewUserPage extends StatelessWidget {
   const NewUserPage({super.key});
@@ -59,11 +61,21 @@ class NewUserPage extends StatelessWidget {
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: ElevatedButton(
-                      onPressed: () {}, child: const Text('Começar'))),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const CreateAccount())
+                        );
+                      }, child: const Text('Começar'))),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomePage()),  
+                        );
+                      },
                       child: const Text('Ja tem uma conta? Login'))),
             ],
           ),
