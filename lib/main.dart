@@ -17,6 +17,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: colorScheme,
         textTheme: textTheme,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(colorScheme.primary),
+                foregroundColor:
+                    MaterialStateProperty.all<Color>(colorScheme.onPrimary))),
         useMaterial3: true,
       ),
       routerConfig: router,

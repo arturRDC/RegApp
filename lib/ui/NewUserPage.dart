@@ -18,65 +18,89 @@ class NewUserPage extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Center(
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Column(
-                children: [
-                  Text(
-                    'Bem vindo ao RegApp',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 28,
-                      height: 36 / 28,
-                    ).copyWith(
-                        color:
-                            Theme.of(context).colorScheme.onSecondaryContainer),
-                    textAlign: TextAlign.center,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Seu assistente pessoal para manter suas plantas felizes e saudáveis',
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Column(
+                  children: [
+                    Text(
+                      'Bem vindo ao RegApp',
                       style: GoogleFonts.poppins(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16,
-                        height: 24 / 16,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 28,
+                        height: 36 / 28,
                       ).copyWith(
                           color: Theme.of(context)
                               .colorScheme
                               .onSecondaryContainer),
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Seu assistente pessoal para manter suas plantas felizes e saudáveis',
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                          height: 24 / 16,
+                        ).copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSecondaryContainer),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
+          SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Image.asset('assets/images/plants_new_user.png')),
           Column(
             children: [
-              SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Image.asset('assets/images/plants_new_user.png')),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const CreateAccount())
-                        );
-                      }, child: const Text('Começar'))),
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const CreateAccount()));
+                      },
+                      child: const Text('Começar'))),
               SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const HomePage()),  
-                        );
-                      },
-                      child: const Text('Ja tem uma conta? Login'))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Ja tem uma conta?',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
+                          );
+                        },
+                        child: Text(
+                          'Login',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    decoration: TextDecoration.underline,
+                                    decorationThickness: 2,
+                                  ),
+                        ),
+                      ),
+                    ],
+                  )),
             ],
           ),
         ],
@@ -84,20 +108,3 @@ class NewUserPage extends StatelessWidget {
     ));
   }
 }
-
-// Text(
-//           'Bem vindo ao RegApp',
-//           style: GoogleFonts.poppins(
-//             fontWeight: FontWeight.w400,
-//             fontSize: 28,
-//             height: 36 / 28,
-//           ).copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
-//         ),
-//         Text(
-//           'Seu assistente pessoal para manter suas plantas felizes e saudáveis',
-//           style: GoogleFonts.poppins(
-//             fontWeight: FontWeight.w400,
-//             fontSize: 16,
-//             height: 24 / 16,
-//           ).copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer),
-//         ),
