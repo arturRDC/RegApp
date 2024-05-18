@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:regapp/router/router.dart';
+import 'package:regapp/router/CustomNavigationHelper.dart';
 import 'package:regapp/styles/colorSchemes.dart';
 import 'package:regapp/styles/typography.dart';
 
 void main() {
+  CustomNavigationHelper.instance;
   runApp(const MyApp());
 }
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
                     MaterialStateProperty.all<Color>(colorScheme.onPrimary))),
         useMaterial3: true,
       ),
-      routerConfig: router,
+      routerConfig: CustomNavigationHelper.router,
     );
   }
 }

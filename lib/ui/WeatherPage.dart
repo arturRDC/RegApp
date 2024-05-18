@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class WeatherPage extends StatefulWidget {
+  const WeatherPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<WeatherPage> createState() => _WeatherPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _WeatherPageState extends State<WeatherPage> {
   int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Center(
             child: Text(
-              'Home',
+              'Weather',
               style: Theme.of(context).textTheme.displayMedium,
             ),
           ),

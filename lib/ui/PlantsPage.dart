@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class PlantsPage extends StatefulWidget {
+  const PlantsPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<PlantsPage> createState() => _PlantsPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _PlantsPageState extends State<PlantsPage> {
   int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Center(
             child: Text(
-              'Home',
+              'Plants',
               style: Theme.of(context).textTheme.displayMedium,
             ),
           ),
