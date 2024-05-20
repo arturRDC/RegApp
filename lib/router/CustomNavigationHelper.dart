@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:regapp/ui/CreateAccount.dart';
+import 'package:regapp/ui/CreateAccountPage.dart';
 import 'package:regapp/ui/HomePage.dart';
 import 'package:regapp/ui/NewUserPage.dart';
 import 'package:regapp/ui/PlantsPage.dart';

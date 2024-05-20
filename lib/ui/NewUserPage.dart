@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:regapp/ui/CreateAccount.dart';
-import 'package:regapp/ui/HomePage.dart';
+import 'package:regapp/ui/CreateAccountPage.dart';
+import 'package:regapp/ui/LoginPage.dart';
 
 class NewUserPage extends StatelessWidget {
   const NewUserPage({super.key});
@@ -83,7 +83,12 @@ class NewUserPage extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       TextButton(
-                        onPressed: () => context.go('/home'),
+                        onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Login()));
+                      },
                         child: Text(
                           'Login',
                           style:
