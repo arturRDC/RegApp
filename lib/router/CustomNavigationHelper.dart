@@ -60,6 +60,7 @@ class CustomNavigationHelper {
             routes: [
               GoRoute(
                 path: homePath,
+                name: 'Início',
                 pageBuilder: (context, GoRouterState state) {
                   return getPage(
                     child: const HomePage(),
@@ -74,6 +75,7 @@ class CustomNavigationHelper {
             routes: [
               GoRoute(
                 path: weatherPath,
+                name: 'Clima',
                 pageBuilder: (context, state) {
                   return getPage(
                     child: const WeatherPage(),
@@ -88,6 +90,7 @@ class CustomNavigationHelper {
             routes: [
               GoRoute(
                 path: plantsPath,
+                name: 'Plantas',
                 pageBuilder: (context, state) {
                   return getPage(
                     child: const PlantsPage(),
@@ -102,6 +105,7 @@ class CustomNavigationHelper {
             routes: [
               GoRoute(
                 path: settingsPath,
+                name: 'Configurações',
                 pageBuilder: (context, state) {
                   return getPage(
                     child: const SettingsPage(),
@@ -118,9 +122,7 @@ class CustomNavigationHelper {
           StatefulNavigationShell navigationShell,
         ) {
           return getPage(
-            child: BottomNavigationPage(
-              child: navigationShell,
-            ),
+            child: BottomNavigationPage(state: state, child: navigationShell),
             state: state,
           );
         },

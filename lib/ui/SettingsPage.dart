@@ -11,18 +11,16 @@ class _SettingsPageState extends State<SettingsPage> {
   int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text(
-              'Settings',
-              style: Theme.of(context).textTheme.displayMedium,
-            ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: Text(
+            'Settings',
+            style: Theme.of(context).textTheme.displayMedium,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

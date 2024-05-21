@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class BottomNavigationPage extends StatefulWidget {
-  const BottomNavigationPage({
+  BottomNavigationPage({
     super.key,
     required this.child,
+    required this.state,
   });
 
   final StatefulNavigationShell child;
+  GoRouterState state;
 
   @override
   State<BottomNavigationPage> createState() => _BottomNavigationPageState();
@@ -18,7 +20,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('RegApp'),
+        title: Text(widget.state.topRoute?.name ?? 'Regapp'),
       ),
       body: SafeArea(
         child: widget.child,
@@ -36,19 +38,19 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'inicio',
+            label: 'Inicio',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sunny),
-            label: 'clima',
+            label: 'Clima',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.place_outlined),
-            label: 'plantas',
+            label: 'Plantas',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'configuracoes',
+            label: 'Configuracoes',
           ),
         ],
       ),
