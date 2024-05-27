@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class BottomNavigationPage extends StatefulWidget {
@@ -35,20 +36,25 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           );
           setState(() {});
         },
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Inicio',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.sunny),
             label: 'Clima',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.place_outlined),
+            icon: SvgPicture.asset(
+              'assets/icons/plantIcon.svg',
+              color: Colors.black, // Adjust the color as per your requirements
+              width: 24, // Adjust the size as per your requirements
+              height: 24,
+            ),
             label: 'Plantas',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Configuracoes',
           ),
