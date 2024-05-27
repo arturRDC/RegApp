@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:regapp/router/CustomNavigationHelper.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,6 +35,17 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           // Add the Listview here
+          ListView(
+            shrinkWrap: true,
+            padding: const EdgeInsets.all(8.0),
+            children: const [
+              Card(
+                child: Text('irrig1'),
+              ),
+              Text('testItem1'),
+              Text('testItem2'),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.only(top: 32),
             child: Text('Clima agora',
