@@ -19,6 +19,8 @@ class BottomNavigationPage extends StatefulWidget {
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   @override
   Widget build(BuildContext context) {
+    print("Size of the screen: ${MediaQuery.of(context).size.width}");
+    var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.state.topRoute?.name ?? 'Regapp'),
@@ -28,6 +30,9 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        unselectedItemColor: const Color(0xFF414941),
+        selectedFontSize: width <= 360 ? 12 : 14,
+        unselectedFontSize: width <= 360 ? 12 : 14,
         currentIndex: widget.child.currentIndex,
         onTap: (index) {
           widget.child.goBranch(
@@ -50,10 +55,10 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                   Icons.home_outlined,
                   color: Color(0xFFF6FCF8),
                 )),
-            label: 'Inicio',
+            label: 'Início',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.wb_sunny_outlined, color: Color(0xFF1C1B1F)),
+            icon: const Icon(Icons.wb_sunny_outlined, color: Color(0xFF414941)),
             activeIcon: Container(
                 width: 64,
                 height: 32,
@@ -70,9 +75,9 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/plantIcon.svg',
-              color: const Color(
-                  0xFF1C1B1F), // Adjust the color as per your requirements
-              width: 24, // Adjust the size as per your requirements
+              colorFilter:
+                  const ColorFilter.mode(Color(0xFF414941), BlendMode.srcIn),
+              width: 24,
               height: 24,
             ),
             activeIcon: Container(
@@ -84,16 +89,16 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
               ),
               child: SvgPicture.asset(
                 'assets/icons/plantIcon.svg',
-                color: const Color(
-                    0xFFF6FCF8), // Adjust the color as per your requirements
-                width: 24, // Adjust the size as per your requirements
+                colorFilter:
+                    const ColorFilter.mode(Color(0xFFF6FCF8), BlendMode.srcIn),
+                width: 24,
                 height: 24,
               ),
             ),
             label: 'Plantas',
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.settings_outlined, color: Color(0xFF1C1B1F)),
+            icon: const Icon(Icons.settings_outlined, color: Color(0xFF414941)),
             activeIcon: Container(
                 width: 64,
                 height: 32,
@@ -105,7 +110,7 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
                   Icons.settings_outlined,
                   color: Color(0xFFF6FCF8),
                 )),
-            label: 'Configuracoes',
+            label: 'Configurações',
           ),
         ],
       ),
