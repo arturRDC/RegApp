@@ -48,11 +48,16 @@ class _HomePageState extends State<HomePage> {
             child: ListView(
               shrinkWrap: true,
               children: const [
-                PlantCard(title: 'Samambaia'),
+                PlantCard(
+                    title: 'Samambaia',
+                    timeLeft: '15 min',
+                    location: 'Interna'),
                 SizedBox(height: 8),
-                PlantCard(title: 'Orquídea'),
+                PlantCard(
+                    title: 'Orquídea', timeLeft: '25 min', location: 'Interna'),
                 SizedBox(height: 8),
-                PlantCard(title: 'Bromélia'),
+                PlantCard(
+                    title: 'Bromélia', timeLeft: '35 min', location: 'Interna'),
                 SizedBox(height: 8),
               ],
             ),
