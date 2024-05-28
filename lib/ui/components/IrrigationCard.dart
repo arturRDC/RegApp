@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class PlantCard extends StatelessWidget {
+class IrrigationCard extends StatelessWidget {
   final String title;
   final String timeLeft;
   final String location;
-  const PlantCard({
+  const IrrigationCard({
     required this.title,
     required this.timeLeft,
     required this.location,

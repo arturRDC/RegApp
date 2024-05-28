@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:regapp/ui/components/PlantCard.dart';
+import 'package:regapp/ui/components/IrrigationCard.dart';
+import 'package:regapp/ui/components/IrrigationList.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -45,22 +46,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: ListView(
-              shrinkWrap: true,
-              children: const [
-                PlantCard(
-                    title: 'Samambaia',
-                    timeLeft: '15 min',
-                    location: 'Interna'),
-                SizedBox(height: 8),
-                PlantCard(
-                    title: 'Orquídea', timeLeft: '25 min', location: 'Interna'),
-                SizedBox(height: 8),
-                PlantCard(
-                    title: 'Bromélia', timeLeft: '35 min', location: 'Interna'),
-                SizedBox(height: 8),
-              ],
-            ),
+            child: IrrigationList(),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 32),
