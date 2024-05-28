@@ -37,25 +37,74 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
           setState(() {});
         },
         items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home_outlined),
+            activeIcon: Container(
+                width: 64,
+                height: 32,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: const Color(0xFF416C49),
+                ),
+                child: const Icon(
+                  Icons.home_outlined,
+                  color: Color(0xFFF6FCF8),
+                )),
             label: 'Inicio',
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.sunny),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.wb_sunny_outlined, color: Color(0xFF1C1B1F)),
+            activeIcon: Container(
+                width: 64,
+                height: 32,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: const Color(0xFF416C49),
+                ),
+                child: const Icon(
+                  Icons.wb_sunny_outlined,
+                  color: Color(0xFFF6FCF8),
+                )),
             label: 'Clima',
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
               'assets/icons/plantIcon.svg',
-              color: Colors.black, // Adjust the color as per your requirements
+              color: const Color(
+                  0xFF1C1B1F), // Adjust the color as per your requirements
               width: 24, // Adjust the size as per your requirements
               height: 24,
             ),
+            activeIcon: Container(
+              width: 64,
+              height: 32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.0),
+                color: const Color(0xFF416C49),
+              ),
+              child: SvgPicture.asset(
+                'assets/icons/plantIcon.svg',
+                color: const Color(
+                    0xFFF6FCF8), // Adjust the color as per your requirements
+                width: 24, // Adjust the size as per your requirements
+                height: 24,
+              ),
+            ),
             label: 'Plantas',
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.settings_outlined, color: Color(0xFF1C1B1F)),
+            activeIcon: Container(
+                width: 64,
+                height: 32,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16.0),
+                  color: const Color(0xFF416C49),
+                ),
+                child: const Icon(
+                  Icons.settings_outlined,
+                  color: Color(0xFFF6FCF8),
+                )),
             label: 'Configuracoes',
           ),
         ],
