@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
           Padding(
             padding: const EdgeInsets.only(top: 32),
             child: GestureDetector(
-              onTap: () => context.go('/plants'),
+              onTap: () => context.push('/irrigations'),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

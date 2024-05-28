@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
 import 'package:regapp/ui/HomePage.dart';
+import 'package:regapp/ui/IrrigationsPage.dart';
 import 'package:regapp/ui/NewUserPage.dart';
 import 'package:regapp/ui/PlantsPage.dart';
 import 'package:regapp/ui/WeatherPage.dart';
@@ -45,6 +46,7 @@ class CustomNavigationHelper {
   static const String weatherPath = '/weather';
   static const String plantsPath = '/plants';
   static const String settingsPath = '/settings';
+  static const String irrigationsPath = '/irrigations';
 
   factory CustomNavigationHelper() {
     return _instance;
@@ -67,7 +69,7 @@ class CustomNavigationHelper {
                     state: state,
                   );
                 },
-              ),
+              )
             ],
           ),
           StatefulShellBranch(
@@ -147,6 +149,16 @@ class CustomNavigationHelper {
           );
         },
       ),
+      GoRoute(
+        path: irrigationsPath,
+        name: 'Irrigações',
+        pageBuilder: (context, GoRouterState state) {
+          return getPage(
+            child: const IrrigationsPage(),
+            state: state,
+          );
+        },
+      )
     ];
 
     router = GoRouter(
