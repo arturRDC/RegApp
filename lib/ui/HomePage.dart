@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/components/IrrigationCard.dart';
 import 'package:regapp/ui/components/IrrigationList.dart';
+import 'package:regapp/ui/components/WeatherCard.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,38 +23,48 @@ class _HomePageState extends State<HomePage> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter)),
       padding: const EdgeInsets.all(24.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Bom dia, ' 'User',
-            style: Theme.of(context).textTheme.headlineLarge,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 32),
-            child: GestureDetector(
-              onTap: () => context.push('/irrigations'),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Próximas irrigações',
-                      style: Theme.of(context).textTheme.headlineSmall),
-                  const Icon(Icons.arrow_forward_ios),
-                ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Bom dia, ' 'User',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: GestureDetector(
+                onTap: () => context.push('/irrigations'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Próximas irrigações',
+                        style: Theme.of(context).textTheme.headlineSmall),
+                    const Icon(Icons.arrow_forward_ios),
+                  ],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: IrrigationList(),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 32),
-            child: Text('Clima agora',
-                style: Theme.of(context).textTheme.headlineSmall),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: IrrigationList(),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: Text('Clima agora',
+                  style: Theme.of(context).textTheme.headlineSmall),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: WeatherCard(
+                title: 'Ensolarado',
+                rainPct: '15',
+                location: 'Natal, RN',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
