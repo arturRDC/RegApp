@@ -14,8 +14,24 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    final currentTime = DateTime.now();
+    final currentHour = currentTime.hour;
+
+    String greeting;
+
+    if (currentHour < 12) {
+      greeting = 'Bom Dia';
+    } else if (currentHour < 18) {
+      greeting = 'Boa Tarde';
+    } else {
+      greeting = 'Boa Noite';
+    }
+
+    const user = 'User';
+
     return Container(
       decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -29,7 +45,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Bom dia, ' 'User',
+              '$greeting, $user',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             Padding(
