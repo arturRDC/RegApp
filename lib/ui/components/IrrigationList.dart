@@ -5,9 +5,9 @@ class IrrigationList extends StatelessWidget {
   IrrigationList({super.key});
 
   final List<Map<String, String>> irrigationData = [
-    {'title': 'Samambaia', 'timeLeft': '15 min', 'location': 'Interna'},
-    {'title': 'Orquídea', 'timeLeft': '25 min', 'location': 'Interna'},
-    {'title': 'Bromélia', 'timeLeft': '35 min', 'location': 'Interna'},
+    {'title': 'Samambaia', 'timeLeft': '15 min', 'location': 'Interna', 'waterNeeds': '150'},
+    {'title': 'Orquídea', 'timeLeft': '25 min', 'location': 'Interna', 'waterNeeds': '200'},
+    {'title': 'Bromélia', 'timeLeft': '35 min', 'location': 'Interna', 'waterNeeds': '300'},
   ];
 
   @override
@@ -26,6 +26,7 @@ class IrrigationList extends StatelessWidget {
         IrrigationCard(
           title: plant['title']!,
           timeLeft: plant['timeLeft']!,
+          waterNeeds: plant['waterNeeds']!,
           location: plant['location']!,
         ),
       );

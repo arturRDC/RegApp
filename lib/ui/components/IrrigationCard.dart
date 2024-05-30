@@ -5,10 +5,12 @@ class IrrigationCard extends StatelessWidget {
   final String title;
   final String timeLeft;
   final String location;
+  final String waterNeeds;
   const IrrigationCard({
     required this.title,
     required this.timeLeft,
     required this.location,
+    required this.waterNeeds,
     super.key,
   });
 
@@ -59,7 +61,7 @@ class IrrigationCard extends StatelessWidget {
                               Color(0xFF737373), BlendMode.srcIn),
                         ),
                         Text(
-                          '200 ml',
+                          '$waterNeeds ml',
                           style: Theme.of(context)
                               .textTheme
                               .titleSmall
