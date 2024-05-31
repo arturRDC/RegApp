@@ -5,12 +5,27 @@ class WeatherCard extends StatelessWidget {
   final String title;
   final String rainPct;
   final String location;
+  final String? weekDay;
   const WeatherCard({
     required this.title,
     required this.rainPct,
     required this.location,
+    this.weekDay,
     super.key,
   });
+
+  String getWeatherIconPath(String title) {
+    switch (title) {
+      case 'Ensolarado':
+        return 'assets/icons/sunnyIcon.png';
+      case 'Chuvoso':
+        return 'assets/icons/rainyIcon.png';
+      case 'Nublado':
+        return 'assets/icons/cloudyIcon.png';
+      default:
+        return 'assets/icons/sunnyIcon.png';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +37,7 @@ class WeatherCard extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.all(16.0),
               child: Image.asset(
-                'assets/icons/sunnyIcon.png',
+                getWeatherIconPath(title),
                 height: 55,
                 width: 55,
               )),
@@ -38,7 +53,7 @@ class WeatherCard extends StatelessWidget {
                       title,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    Text(location,
+                    Text(weekDay == null ? location : '$weekDay - $location',
                         style: Theme.of(context).textTheme.bodyMedium),
                   ],
                 ),

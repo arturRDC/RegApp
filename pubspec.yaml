@@ -68,6 +68,8 @@ flutter:
     - assets/icons/pottedPlantIcon.png
     - assets/icons/sunnyIcon.png
     - assets/icons/rainPctIcon.svg
+    - assets/icons/rainyIcon.png
+    - assets/icons/cloudyIcon.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
