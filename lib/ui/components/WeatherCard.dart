@@ -35,7 +35,7 @@ class WeatherCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               child: Image.asset(
                 getWeatherIconPath(title),
                 height: 55,
@@ -49,12 +49,21 @@ class WeatherCard extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: Theme.of(context).textTheme.titleMedium,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+                      child: Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
                     ),
-                    Text(weekDay == null ? location : '$weekDay - $location',
+                    Text(weekDay == null ? location : '$weekDay',
                         style: Theme.of(context).textTheme.bodyMedium),
+                    if (weekDay != null)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                        child: Text(location,
+                            style: Theme.of(context).textTheme.bodyMedium),
+                      ),
                   ],
                 ),
                 Padding(
