@@ -33,11 +33,6 @@ class _HomePageState extends State<HomePage> {
     const user = 'User';
 
     return Container(
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: <Color>[Color(0xFFF7FBF2), Color(0xFFD7DBD3)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter)),
       padding: const EdgeInsets.all(24.0),
       child: SingleChildScrollView(
         child: Column(

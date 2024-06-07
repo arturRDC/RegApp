@@ -26,8 +26,14 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> {
         title: Text(widget.state.topRoute?.name ?? 'Regapp'),
       ),
       body: SafeArea(
+          child: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: <Color>[
+          Theme.of(context).colorScheme.surface,
+          Theme.of(context).colorScheme.surfaceVariant
+        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: widget.child,
-      ),
+      )),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         unselectedItemColor: const Color(0xFF414941),
