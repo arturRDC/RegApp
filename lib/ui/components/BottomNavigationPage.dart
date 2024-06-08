@@ -19,11 +19,13 @@ class BottomNavigationPage extends StatefulWidget {
 class _BottomNavigationPageState extends State<BottomNavigationPage> {
   @override
   Widget build(BuildContext context) {
-    print("Size of the screen: ${MediaQuery.of(context).size.width}");
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.state.topRoute?.name ?? 'Regapp'),
+        title: Text(
+          widget.state.topRoute?.name ?? 'Regapp',
+          style: Theme.of(context).textTheme.headlineMedium,
+        ),
       ),
       body: SafeArea(
           child: Container(

@@ -25,8 +25,7 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Clima Agora',
-                style: Theme.of(context).textTheme.headlineSmall),
+            Text('Hoje', style: Theme.of(context).textTheme.headlineSmall),
             WeatherCard(
                 title: weatherNow['title']!,
                 rainPct: weatherNow['rainPct']!,
