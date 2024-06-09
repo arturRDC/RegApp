@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:regapp/ui/NewPassword.dart';
 
 class Verification extends StatefulWidget {
   const Verification({super.key});
@@ -61,7 +62,12 @@ class _VerificationState extends State<Verification> {
                   child: ButtonTheme(
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const NewPassword()));
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor:
                               Theme.of(context).colorScheme.primary),
