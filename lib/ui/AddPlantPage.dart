@@ -11,6 +11,10 @@ class AddPlantPage extends StatefulWidget {
 class _AddPlantPageState extends State<AddPlantPage> {
   String fileName = '';
   PlatformFile? pickedFile;
+  String? selectedOption = '';
+
+  TextEditingController nameController = TextEditingController();
+  TextEditingController volumeController = TextEditingController();
 
   void openFilePicker() async {
     FilePickerResult? result =
@@ -33,9 +37,9 @@ class _AddPlantPageState extends State<AddPlantPage> {
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
-      body: Form(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Form(
           child: Column(
             children: [
               Padding(
@@ -144,13 +148,72 @@ class _AddPlantPageState extends State<AddPlantPage> {
                     ),
                   ),
                   TextFormField(
-                    readOnly: true,
+                    controller: nameController,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(4))),
                         hintText: 'Ex: Samambaia01',
                         hintStyle:
                             TextStyle(color: Color.fromARGB(128, 0, 0, 0))),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
+                    child: Text(
+                      'Volume de água',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
+                  TextFormField(
+                    controller: volumeController,
+                    decoration: const InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(4))),
+                        hintText: 'Ex: 200 ml',
+                        hintStyle:
+                            TextStyle(color: Color.fromARGB(128, 0, 0, 0))),
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
+                    child: Text(
+                      'Ambiente',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Interna'),
+                    leading: Radio(
+                      value: 'Interna',
+                      groupValue: selectedOption,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedOption = value;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text('Externa'),
+                    leading: Radio(
+                      value: 'Externa',
+                      groupValue: selectedOption,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedOption = value;
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),
