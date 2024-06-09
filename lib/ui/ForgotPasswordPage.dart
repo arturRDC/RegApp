@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:regapp/ui/Verification.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -48,8 +49,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 
                 TextButton(
                         onPressed: () {
-                        
-                            
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Verification()));
                       },
                         child: Text(
                           'Eu tenho um código de acesso',
