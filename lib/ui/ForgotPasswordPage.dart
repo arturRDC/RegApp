@@ -55,9 +55,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           'Eu tenho um código de acesso',
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Color.fromRGBO(75, 119, 30, 1),
+                                    color: const Color.fromRGBO(75, 119, 30, 1),
                                     fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
+                                    decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
                                     decorationThickness: 2,
                                   ),
                         ),

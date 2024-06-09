@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/widgets.dart';
 
 class AddPlantPage extends StatefulWidget {
   const AddPlantPage({super.key});

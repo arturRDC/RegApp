@@ -81,9 +81,9 @@ class _CreateAccountState extends State<CreateAccount> {
                           'Já tenho uma conta',
                           style:
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Color.fromRGBO(75, 119, 30, 1),
+                                    color: const Color.fromRGBO(75, 119, 30, 1),
                                     fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
+                                    decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
                                     decorationThickness: 2,
                                   ),
                         ),

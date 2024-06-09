@@ -85,7 +85,7 @@ class _LoginState extends State<Login> {
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: const Color.fromRGBO(75, 119, 30, 1),
                               fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline,
+                              decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
                               decorationThickness: 2,
                             ),
                       ),
@@ -104,7 +104,7 @@ class _LoginState extends State<Login> {
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: const Color.fromRGBO(75, 119, 30, 1),
                           fontWeight: FontWeight.w600,
-                          decoration: TextDecoration.underline,
+                          decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
                           decorationThickness: 2,
                         ),
                   ),
