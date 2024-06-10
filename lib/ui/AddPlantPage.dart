@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
 class AddPlantPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
       appBar: AppBar(
         title: Text(
           "Adicionar Planta",
-          style: Theme.of(context).textTheme.headlineMedium,
+          style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
       body: SingleChildScrollView(
@@ -121,17 +122,22 @@ class _AddPlantPageState extends State<AddPlantPage> {
                     child: Text(
                       'Imagem',
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                   TextFormField(
                     readOnly: true,
                     onTap: openFilePicker,
                     decoration: InputDecoration(
-                      border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4))),
-                      labelText: 'Escolha uma imagem',
-                      suffixIcon: const Icon(Icons.attach_file),
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4))),
+                            labelText: 'Escolha uma imagem',
+                            suffixIcon: const Icon(Icons.attach_file),
+                            hintStyle: Theme.of(context).textTheme.bodyLarge)
+                        .copyWith(
+                      hintStyle:
+                          const TextStyle(color: Color.fromARGB(128, 0, 0, 0)),
                       hintText: fileName.isEmpty
                           ? 'Imagem não selecionada'
                           : fileName,
@@ -150,17 +156,20 @@ class _AddPlantPageState extends State<AddPlantPage> {
                     child: Text(
                       'Nome',
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                   TextFormField(
                     controller: nameController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4))),
-                        hintText: 'Ex: Samambaia01',
-                        hintStyle:
-                            TextStyle(color: Color.fromARGB(128, 0, 0, 0))),
+                    decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4))),
+                            hintText: 'Ex: Samambaia01',
+                            hintStyle: Theme.of(context).textTheme.bodyLarge)
+                        .copyWith(
+                            hintStyle: const TextStyle(
+                                color: Color.fromARGB(128, 0, 0, 0))),
                   ),
                 ],
               ),
@@ -172,17 +181,20 @@ class _AddPlantPageState extends State<AddPlantPage> {
                     child: Text(
                       'Volume de água',
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                   TextFormField(
                     controller: volumeController,
-                    decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(4))),
-                        hintText: 'Ex: 200 ml',
-                        hintStyle:
-                            TextStyle(color: Color.fromARGB(128, 0, 0, 0))),
+                    decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4))),
+                            hintText: 'Ex: 200 ml',
+                            hintStyle: Theme.of(context).textTheme.bodyLarge)
+                        .copyWith(
+                            hintStyle: const TextStyle(
+                                color: Color.fromARGB(128, 0, 0, 0))),
                   ),
                 ],
               ),
@@ -194,11 +206,12 @@ class _AddPlantPageState extends State<AddPlantPage> {
                     child: Text(
                       'Ambiente',
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                   ListTile(
-                    title: const Text('Interna'),
+                    title: Text('Interna',
+                        style: Theme.of(context).textTheme.bodyLarge),
                     leading: Radio(
                       value: 'Interna',
                       groupValue: selectedOption,
@@ -210,7 +223,8 @@ class _AddPlantPageState extends State<AddPlantPage> {
                     ),
                   ),
                   ListTile(
-                    title: const Text('Externa'),
+                    title: Text('Externa',
+                        style: Theme.of(context).textTheme.bodyLarge),
                     leading: Radio(
                       value: 'Externa',
                       groupValue: selectedOption,
@@ -227,11 +241,11 @@ class _AddPlantPageState extends State<AddPlantPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
+                    padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Text(
                       'Frequência',
                       textAlign: TextAlign.left,
-                      style: Theme.of(context).textTheme.headlineSmall,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                   WeekFrequencyInput(onFreqChange: _handleFreqChange),
@@ -239,12 +253,13 @@ class _AddPlantPageState extends State<AddPlantPage> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
                       // Handle form submission
+                      context.pop();
                     },
                     child: Text(
                       'Adicionar planta',

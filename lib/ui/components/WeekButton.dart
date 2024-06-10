@@ -5,11 +5,13 @@ class WeekButton extends StatefulWidget {
   final Function(String, bool) onPressWeek;
   final bool isRoundedLeft;
   final bool isRoundedRight;
+  final bool isActive;
   const WeekButton(
       {required this.day,
       required this.onPressWeek,
       required this.isRoundedLeft,
       required this.isRoundedRight,
+      required this.isActive,
       super.key});
 
   @override
@@ -17,12 +19,18 @@ class WeekButton extends StatefulWidget {
 }
 
 class _WeekButtonState extends State<WeekButton> {
-  bool isActive = false;
+  bool _isActive = false;
 
-  void _handleTapWeek(String day, bool isActive) {
-    widget.onPressWeek(day, !isActive);
+  @override
+  void initState() {
+    super.initState();
+    _isActive = widget.isActive;
+  }
+
+  void _handleTapWeek() {
+    widget.onPressWeek(widget.day, !_isActive);
     setState(() {
-      this.isActive = !isActive;
+      _isActive = !_isActive;
     });
   }
 
@@ -30,14 +38,15 @@ class _WeekButtonState extends State<WeekButton> {
   Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onTap: () => _handleTapWeek(widget.day, isActive),
+        onTap: () => _handleTapWeek(),
         child: Container(
           height: 40,
           alignment: Alignment.center,
           decoration: BoxDecoration(
             border: Border.all(color: const Color(0xff727970), width: 1),
-            color:
-                isActive ? Theme.of(context).colorScheme.primary : Colors.white,
+            color: _isActive
+                ? Theme.of(context).colorScheme.primary
+                : Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: widget.isRoundedLeft
                   ? const Radius.circular(20)
@@ -56,7 +65,7 @@ class _WeekButtonState extends State<WeekButton> {
           child: Text(
             widget.day,
             style: TextStyle(
-              color: isActive ? Colors.white : Colors.black,
+              color: _isActive ? Colors.white : Colors.black,
               fontSize: 16,
             ),
           ),

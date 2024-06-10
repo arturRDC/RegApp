@@ -24,7 +24,7 @@ class _PlantsPageState extends State<PlantsPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 48),
+            padding: const EdgeInsets.all(16),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
