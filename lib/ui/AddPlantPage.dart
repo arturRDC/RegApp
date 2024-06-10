@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
@@ -15,6 +16,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
   PlatformFile? pickedFile;
   String? selectedOption = '';
   Set<String> frequency = {'Ter', 'Qui', 'Sab'};
+  TimeOfDay _time = TimeOfDay.now();
 
   TextEditingController nameController = TextEditingController();
   TextEditingController volumeController = TextEditingController();
@@ -41,6 +43,15 @@ class _AddPlantPageState extends State<AddPlantPage> {
     volumeController.text = '300 ml';
     // if error
     context.push('/plants/identifyPlantError');
+  }
+
+  Future<void> _selectTime() async {
+    TimeOfDay? chosen =
+        await showTimePicker(initialTime: _time, context: context);
+
+    if (chosen != null) {
+      setState(() => _time = chosen);
+    }
   }
 
   @override
@@ -257,6 +268,34 @@ class _AddPlantPageState extends State<AddPlantPage> {
                   WeekFrequencyInput(
                     onFreqChange: _handleFreqChange,
                     defaultFreq: frequency,
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      'Hora',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                        onTap: () => _selectTime(),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            "${_time.hour}:${_time.minute}",
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
+                        )),
                   ),
                 ],
               ),
