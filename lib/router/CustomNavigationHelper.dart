@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/AddPlantPage.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
+import 'package:regapp/ui/EditPlantPage.dart';
 import 'package:regapp/ui/HomePage.dart';
 import 'package:regapp/ui/IrrigationsPage.dart';
 import 'package:regapp/ui/NewUserPage.dart';
@@ -49,6 +50,7 @@ class CustomNavigationHelper {
   static const String settingsPath = '/settings';
   static const String irrigationsPath = '/irrigations';
   static const String addPlantsPath = '/plants/addPlant';
+  static const String editPlantsPath = '/plants/editPlant/:id';
 
   factory CustomNavigationHelper() {
     return _instance;
@@ -170,7 +172,18 @@ class CustomNavigationHelper {
             state: state,
           );
         },
-      )
+      ),
+      GoRoute(
+        path: editPlantsPath,
+        name: 'Editar planta',
+        pageBuilder: (context, GoRouterState state) {
+          final String pathId = state.pathParameters['id']!;
+          return getPage(
+            child: EditPlantPage(id: pathId),
+            state: state,
+          );
+        },
+      ),
     ];
 
     router = GoRouter(

@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class PlantCard extends StatelessWidget {
+  final String id;
   final String title;
   final String timeLeft;
   final String location;
   final String waterNeeds;
   const PlantCard({
+    required this.id,
     required this.title,
     required this.timeLeft,
     required this.location,
@@ -21,14 +25,17 @@ class PlantCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SvgPicture.asset(
-              'assets/icons/edit_square.svg',
-              colorFilter:
-                  const ColorFilter.mode(Color(0xFF1C1B1F), BlendMode.srcIn),
-              width: 24,
-              height: 24,
+          GestureDetector(
+            onTap: () => context.push('/plants/editPlant/$id'),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SvgPicture.asset(
+                'assets/icons/edit_square.svg',
+                colorFilter:
+                    const ColorFilter.mode(Color(0xFF1C1B1F), BlendMode.srcIn),
+                width: 24,
+                height: 24,
+              ),
             ),
           ),
           const SizedBox(width: 10),

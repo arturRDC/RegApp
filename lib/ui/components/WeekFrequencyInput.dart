@@ -3,7 +3,9 @@ import 'package:regapp/ui/components/WeekButton.dart';
 
 class WeekFrequencyInput extends StatefulWidget {
   final Function(Set<String>) onFreqChange;
-  const WeekFrequencyInput({required this.onFreqChange, super.key});
+  final Set<String> defaultFreq;
+  const WeekFrequencyInput(
+      {required this.onFreqChange, required this.defaultFreq, super.key});
 
   @override
   State<WeekFrequencyInput> createState() => _WeekFrequencyInputState();
@@ -17,6 +19,12 @@ class _WeekFrequencyInputState extends State<WeekFrequencyInput> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    frequency = widget.defaultFreq;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
@@ -27,49 +35,49 @@ class _WeekFrequencyInputState extends State<WeekFrequencyInput> {
             onPressWeek: _handleClickWeek,
             isRoundedLeft: true,
             isRoundedRight: false,
-            isActive: false,
+            isActive: frequency.contains('Seg'),
           ),
           WeekButton(
             day: 'Ter',
             onPressWeek: _handleClickWeek,
             isRoundedLeft: false,
             isRoundedRight: false,
-            isActive: true,
+            isActive: frequency.contains('Ter'),
           ),
           WeekButton(
             day: 'Qua',
             onPressWeek: _handleClickWeek,
             isRoundedLeft: false,
             isRoundedRight: false,
-            isActive: false,
+            isActive: frequency.contains('Qua'),
           ),
           WeekButton(
             day: 'Qui',
             onPressWeek: _handleClickWeek,
             isRoundedLeft: false,
             isRoundedRight: false,
-            isActive: true,
+            isActive: frequency.contains('Qui'),
           ),
           WeekButton(
             day: 'Sex',
             onPressWeek: _handleClickWeek,
             isRoundedLeft: false,
             isRoundedRight: false,
-            isActive: false,
+            isActive: frequency.contains('Sex'),
           ),
           WeekButton(
             day: 'Sab',
             onPressWeek: _handleClickWeek,
             isRoundedLeft: false,
             isRoundedRight: false,
-            isActive: true,
+            isActive: frequency.contains('Sab'),
           ),
           WeekButton(
             day: 'Dom',
             onPressWeek: _handleClickWeek,
             isRoundedLeft: false,
             isRoundedRight: true,
-            isActive: false,
+            isActive: frequency.contains('Dom'),
           ),
         ],
       ),

@@ -3,18 +3,27 @@ import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
-class AddPlantPage extends StatefulWidget {
-  const AddPlantPage({super.key});
+class EditPlantPage extends StatefulWidget {
+  final String id;
+  const EditPlantPage({required this.id, super.key});
 
   @override
-  _AddPlantPageState createState() => _AddPlantPageState();
+  _EditPlantPageState createState() => _EditPlantPageState();
 }
 
-class _AddPlantPageState extends State<AddPlantPage> {
+class _EditPlantPageState extends State<EditPlantPage> {
   String fileName = '';
   PlatformFile? pickedFile;
-  String? selectedOption = '';
-  Set<String> frequency = {'Ter', 'Qui', 'Sab'};
+  String? selectedLocation = '';
+  Set<String> frequency = {};
+
+  Map<String, String> plantData = {
+    'id': '3',
+    'title': 'Bromélia',
+    'frequency': '{Seg, Qua, Sex, Dom}',
+    'location': 'Interna',
+    'waterNeeds': '300'
+  };
 
   TextEditingController nameController = TextEditingController();
   TextEditingController volumeController = TextEditingController();
@@ -35,12 +44,32 @@ class _AddPlantPageState extends State<AddPlantPage> {
     frequency = newFrequency;
   }
 
+  Set<String> freqStrToSet(String freqStr) {
+    // Remove the curly braces
+    String cleanedString = freqStr.replaceAll('{', '').replaceAll('}', '');
+
+    // Split the string into a list of substrings
+    List<String> substrings = cleanedString.split(', ');
+
+    // Create a Set<String> from the list of substrings
+    return Set<String>.from(substrings);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = plantData['title']!;
+    volumeController.text = plantData['waterNeeds']!;
+    selectedLocation = plantData['location']!;
+    frequency = freqStrToSet(plantData['frequency']!);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Adicionar Planta",
+          "Editar Planta",
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),
@@ -214,10 +243,10 @@ class _AddPlantPageState extends State<AddPlantPage> {
                         style: Theme.of(context).textTheme.bodyLarge),
                     leading: Radio(
                       value: 'Interna',
-                      groupValue: selectedOption,
+                      groupValue: selectedLocation,
                       onChanged: (value) {
                         setState(() {
-                          selectedOption = value;
+                          selectedLocation = value;
                         });
                       },
                     ),
@@ -227,10 +256,10 @@ class _AddPlantPageState extends State<AddPlantPage> {
                         style: Theme.of(context).textTheme.bodyLarge),
                     leading: Radio(
                       value: 'Externa',
-                      groupValue: selectedOption,
+                      groupValue: selectedLocation,
                       onChanged: (value) {
                         setState(() {
-                          selectedOption = value;
+                          selectedLocation = value;
                         });
                       },
                     ),
