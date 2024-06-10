@@ -12,7 +12,8 @@ class WeekFrequencyInput extends StatefulWidget {
 class _WeekFrequencyInputState extends State<WeekFrequencyInput> {
   Set<String> frequency = {};
   void _handleClickWeek(String week, bool isActive) {
-    isActive ? frequency.remove(week) : frequency.add(week);
+    isActive ? frequency.add(week) : frequency.remove(week);
+    widget.onFreqChange(frequency);
   }
 
   @override
