@@ -16,6 +16,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
   PlatformFile? pickedFile;
   String? selectedLocation = '';
   Set<String> frequency = {};
+  TimeOfDay _time = TimeOfDay.now();
 
   Map<String, String> plantData = {
     'id': '3',
@@ -63,6 +64,23 @@ class _EditPlantPageState extends State<EditPlantPage> {
     context.push('/plants/identifyPlantError');
   }
 
+  Future<void> _selectTime() async {
+    TimeOfDay? chosen = await showTimePicker(
+      initialTime: _time,
+      context: context,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child ?? Container(),
+        );
+      },
+    );
+
+    if (chosen != null) {
+      setState(() => _time = chosen);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -70,6 +88,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
     volumeController.text = plantData['waterNeeds']!;
     selectedLocation = plantData['location']!;
     frequency = freqStrToSet(plantData['frequency']!);
+    _time = const TimeOfDay(hour: 08, minute: 30);
   }
 
   @override
@@ -286,6 +305,34 @@ class _EditPlantPageState extends State<EditPlantPage> {
                   WeekFrequencyInput(
                     onFreqChange: _handleFreqChange,
                     defaultFreq: frequency,
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 4),
+                    child: Text(
+                      'Hora',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                        onTap: () => _selectTime(),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            "${_time.hour}:${_time.minute.toString().padLeft(2, '0')}",
+                            style: Theme.of(context).textTheme.headlineLarge,
+                          ),
+                        )),
                   ),
                 ],
               ),

@@ -283,7 +283,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.only(top: 16, bottom: 4),
                     child: Text(
                       'Hora',
                       textAlign: TextAlign.left,
