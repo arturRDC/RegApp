@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
 class AddPlantPage extends StatefulWidget {
   const AddPlantPage({super.key});
@@ -12,6 +13,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
   String fileName = '';
   PlatformFile? pickedFile;
   String? selectedOption = '';
+  Set<String> frequency = {};
 
   TextEditingController nameController = TextEditingController();
   TextEditingController volumeController = TextEditingController();
@@ -26,6 +28,10 @@ class _AddPlantPageState extends State<AddPlantPage> {
         fileName = pickedFile!.name;
       });
     }
+  }
+
+  void _handleFreqChange(newFrequency) {
+    frequency = newFrequency;
   }
 
   @override
@@ -215,6 +221,20 @@ class _AddPlantPageState extends State<AddPlantPage> {
                       },
                     ),
                   ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 4),
+                    child: Text(
+                      'Frequência',
+                      textAlign: TextAlign.left,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ),
+                  WeekFrequencyInput(onFreqChange: _handleFreqChange),
                 ],
               ),
               Padding(
