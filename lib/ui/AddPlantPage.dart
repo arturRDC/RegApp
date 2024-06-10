@@ -46,8 +46,16 @@ class _AddPlantPageState extends State<AddPlantPage> {
   }
 
   Future<void> _selectTime() async {
-    TimeOfDay? chosen =
-        await showTimePicker(initialTime: _time, context: context);
+    TimeOfDay? chosen = await showTimePicker(
+      initialTime: _time,
+      context: context,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child ?? Container(),
+        );
+      },
+    );
 
     if (chosen != null) {
       setState(() => _time = chosen);
@@ -292,7 +300,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            "${_time.hour}:${_time.minute}",
+                            "${_time.hour}:${_time.minute.toString().padLeft(2, '0')}",
                             style: Theme.of(context).textTheme.headlineLarge,
                           ),
                         )),
