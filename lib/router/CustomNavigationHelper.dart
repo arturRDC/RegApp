@@ -4,6 +4,7 @@ import 'package:regapp/ui/AddPlantPage.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
 import 'package:regapp/ui/EditPlantPage.dart';
 import 'package:regapp/ui/HomePage.dart';
+import 'package:regapp/ui/IdentifyPlantErrorPage.dart';
 import 'package:regapp/ui/IrrigationsPage.dart';
 import 'package:regapp/ui/NewUserPage.dart';
 import 'package:regapp/ui/PlantsPage.dart';
@@ -51,6 +52,7 @@ class CustomNavigationHelper {
   static const String irrigationsPath = '/irrigations';
   static const String addPlantsPath = '/plants/addPlant';
   static const String editPlantsPath = '/plants/editPlant/:id';
+  static const String identifyPlantErrorPath = '/plants/identifyPlantError';
 
   factory CustomNavigationHelper() {
     return _instance;
@@ -180,6 +182,16 @@ class CustomNavigationHelper {
           final String pathId = state.pathParameters['id']!;
           return getPage(
             child: EditPlantPage(id: pathId),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        path: identifyPlantErrorPath,
+        name: 'Identificar planta',
+        pageBuilder: (context, GoRouterState state) {
+          return getPage(
+            child: const IdentifyPlantErrorPage(),
             state: state,
           );
         },

@@ -35,6 +35,14 @@ class _AddPlantPageState extends State<AddPlantPage> {
     frequency = newFrequency;
   }
 
+  void _identifyPlant() {
+    // if success
+    nameController.text = 'Samambaia';
+    volumeController.text = '300 ml';
+    // if error
+    context.push('/plants/identifyPlantError');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,9 +98,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Color(0xFF7ca40c))),
-                    onPressed: () {
-                      // Handle form submission
-                    },
+                    onPressed: () => _identifyPlant(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

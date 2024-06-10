@@ -55,6 +55,14 @@ class _EditPlantPageState extends State<EditPlantPage> {
     return Set<String>.from(substrings);
   }
 
+  void _identifyPlant() {
+    // if success
+    nameController.text = 'Samambaia';
+    volumeController.text = '300 ml';
+    // if error
+    context.push('/plants/identifyPlantError');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -119,9 +127,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                     style: const ButtonStyle(
                         backgroundColor:
                             MaterialStatePropertyAll(Color(0xFF7ca40c))),
-                    onPressed: () {
-                      // Handle form submission
-                    },
+                    onPressed: () => _identifyPlant(),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
