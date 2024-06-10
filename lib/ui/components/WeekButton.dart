@@ -18,35 +18,46 @@ class WeekButton extends StatefulWidget {
 
 class _WeekButtonState extends State<WeekButton> {
   bool isActive = false;
+
+  void _handleTapWeek(String day, bool isActive) {
+    widget.onPressWeek(day, !isActive);
+    setState(() {
+      this.isActive = !isActive;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => widget.onPressWeek(widget.day, isActive),
-      child: Container(
-        height: 40,
-        decoration: BoxDecoration(
-          border: Border.all(),
-          color: isActive ? Colors.green : Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft:
-                widget.isRoundedLeft ? const Radius.circular(20) : Radius.zero,
-            bottomLeft:
-                widget.isRoundedLeft ? const Radius.circular(20) : Radius.zero,
-            topRight:
-                widget.isRoundedRight ? const Radius.circular(20) : Radius.zero,
-            bottomRight:
-                widget.isRoundedRight ? const Radius.circular(20) : Radius.zero,
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => _handleTapWeek(widget.day, isActive),
+        child: Container(
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            border: Border.all(color: const Color(0xff727970), width: 1),
+            color:
+                isActive ? Theme.of(context).colorScheme.primary : Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: widget.isRoundedLeft
+                  ? const Radius.circular(20)
+                  : Radius.zero,
+              bottomLeft: widget.isRoundedLeft
+                  ? const Radius.circular(20)
+                  : Radius.zero,
+              topRight: widget.isRoundedRight
+                  ? const Radius.circular(20)
+                  : Radius.zero,
+              bottomRight: widget.isRoundedRight
+                  ? const Radius.circular(20)
+                  : Radius.zero,
+            ),
           ),
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              widget.day,
-              style: TextStyle(
-                color: isActive ? Colors.white : Colors.black,
-                fontSize: 16,
-              ),
+          child: Text(
+            widget.day,
+            style: TextStyle(
+              color: isActive ? Colors.white : Colors.black,
+              fontSize: 16,
             ),
           ),
         ),
