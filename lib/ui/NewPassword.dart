@@ -22,7 +22,7 @@ class _NewPasswordState extends State<NewPassword> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 Icon(Icons.mark_email_read_outlined, size: 120, color: Theme.of(context).colorScheme.primary),
-                Text("Email validado com sucesso!"),
+                const Text("Email validado com sucesso!"),
                 TextFormField(
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
@@ -30,9 +30,9 @@ class _NewPasswordState extends State<NewPassword> {
                     labelText: "Nova senha",
                     labelStyle: TextStyle(color:Theme.of(context).colorScheme.primary),                  
                   ),
-                  textAlign: TextAlign.center,
                   style: TextStyle(color:Theme.of(context).colorScheme.primary),
                 ),
+                const SizedBox(height: 15),
                 TextFormField(
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
@@ -40,7 +40,6 @@ class _NewPasswordState extends State<NewPassword> {
                     labelText: "Confirmar senha",
                     labelStyle: TextStyle(color:Theme.of(context).colorScheme.primary),                  
                   ),
-                  textAlign: TextAlign.center,
                   style: TextStyle(color:Theme.of(context).colorScheme.primary),
                 ),
                 

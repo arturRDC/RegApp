@@ -22,11 +22,11 @@ class _VerificationState extends State<Verification> {
               children: <Widget>[
                 Icon(Icons.eco,
                     size: 120, color: Theme.of(context).colorScheme.primary),
-                Text("Código de acesso"),
+                const Text("Código de acesso"),
                 Align(
                   alignment: Alignment.center,
                   child: VerificationCode(
-                  textStyle: TextStyle(fontSize: 20.0),
+                  textStyle: const TextStyle(fontSize: 20.0),
                   keyboardType: TextInputType.number,
                   underlineColor: Colors
                       .amber, // If this is null it will use primaryColor: Colors.red from Theme
@@ -34,13 +34,13 @@ class _VerificationState extends State<Verification> {
                   cursorColor: Theme.of(context).colorScheme.primary, // If this is null it will default to the ambient
                   // clearAll is NOT required, you can delete it
                   // takes any widget, so you can implement your design
-                  clearAll: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  clearAll: const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       'Limpar',
                       style: TextStyle(
                           fontSize: 14.0,
-                          decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
+                          decoration: TextDecoration.underline, decorationColor: Color.fromRGBO(75, 119, 30, 1),
                           color: Color.fromRGBO(75, 119, 30, 1)),
                     ),
                   ),

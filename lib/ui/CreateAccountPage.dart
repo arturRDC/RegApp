@@ -21,93 +21,98 @@ class _CreateAccountState extends State<CreateAccount> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-      title: const Text('Criar Conta')
-      ),
-      body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: Form(
-            child: Column(
+        appBar: AppBar(title: const Text('Criar Conta')),
+        body: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            child: 
+            Expanded(
+                child: Container(
+                alignment: Alignment.center,
+                child: Form(
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Icon(Icons.eco, size: 120, color: Theme.of(context).colorScheme.primary),
+                Icon(Icons.eco,
+                  size: 120, color: Theme.of(context).colorScheme.primary),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     labelText: "Email",
-                    labelStyle: TextStyle(color:Theme.of(context).colorScheme.primary),                  
+                    labelStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                        
                   ),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color:Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
+                const SizedBox(height: 15),
                 TextFormField(
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
-                    labelText: "Usuário",
-                    labelStyle: TextStyle(color:Theme.of(context).colorScheme.primary),                  
+                    labelText: "Nome de usuário",
+                    labelStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color:Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
+                const SizedBox(height: 15),
                 TextFormField(
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
                     labelText: "Senha",
-                    labelStyle: TextStyle(color:Theme.of(context).colorScheme.primary),                  
+                    labelStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color:Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
+                const SizedBox(height: 15),
                 TextFormField(
                   obscureText: true,
                   keyboardType: TextInputType.visiblePassword,
                   decoration: InputDecoration(
                     labelText: "Confirmar Senha",
-                    labelStyle: TextStyle(color:Theme.of(context).colorScheme.primary),                  
+                    labelStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color:Theme.of(context).colorScheme.primary),
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
-  
-                  TextButton(
-                        onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Login()));
-                      },
-                        child: Text(
-                          'Já tenho uma conta',
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: const Color.fromRGBO(75, 119, 30, 1),
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
-                                    decorationThickness: 2,
-                                  ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Login()));
+                  },
+                  child: Text(
+                    'Já tenho uma conta',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: const Color.fromRGBO(75, 119, 30, 1),
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                          decorationColor: const Color.fromRGBO(75, 119, 30, 1),
+                          decorationThickness: 2,
                         ),
-                      ),
-                
-
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: ButtonTheme(
+                  ),
+                ),
+                //SizedBox(height: 200),
+                ButtonTheme(
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: (){
-                      },
-                      style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.primary),
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary),
                       child: const Text(
                         "Realizar Cadastro",
                         style: TextStyle(color: Colors.white, fontSize: 14),
                       ),
-                    ),),
-                ),
+                    ),
+                  ),
               ],
-            )
-        )
-      )
-    );
+            ))
+                  )),
+            ));
   }
 }

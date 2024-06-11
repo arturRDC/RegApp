@@ -28,7 +28,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     labelStyle:
                         TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
-                  textAlign: TextAlign.center,
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
