@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
-import 'package:regapp/ui/ForgotPasswordPage.dart';
+import 'package:regapp/ui/ResetPasswordPage.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -85,7 +85,9 @@ class _LoginState extends State<Login> {
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: const Color.fromRGBO(75, 119, 30, 1),
                               fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
+                              decoration: TextDecoration.underline,
+                              decorationColor:
+                                  const Color.fromRGBO(75, 119, 30, 1),
                               decorationThickness: 2,
                             ),
                       ),
@@ -97,14 +99,15 @@ class _LoginState extends State<Login> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ForgotPassword()));
+                            builder: (context) => const ResetPasswordPage()));
                   },
                   child: Text(
                     'Esqueci minha senha',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: const Color.fromRGBO(75, 119, 30, 1),
                           fontWeight: FontWeight.w600,
-                          decoration: TextDecoration.underline, decorationColor: const Color.fromRGBO(75, 119, 30, 1),
+                          decoration: TextDecoration.underline,
+                          decorationColor: const Color.fromRGBO(75, 119, 30, 1),
                           decorationThickness: 2,
                         ),
                   ),

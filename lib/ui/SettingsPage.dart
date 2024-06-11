@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/components/SettingsItem.dart';
 import 'package:regapp/ui/components/SettingsItemRounded.dart';
 
@@ -45,7 +46,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           SettingsItem(
             title: 'Alterar senha',
-            onPress: () {},
+            onPress: () => context.push('/resetPassword'),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
