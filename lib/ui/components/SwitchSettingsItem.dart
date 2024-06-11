@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class SwitchSettingsItem extends StatefulWidget {
+class SwitchSettingsItem extends StatelessWidget {
   final String title;
   final Function(bool) onChanged;
   final bool isEnabled;
@@ -10,16 +10,8 @@ class SwitchSettingsItem extends StatefulWidget {
       required this.isEnabled,
       super.key});
 
-  @override
-  _SwitchSettingsItemState createState() => _SwitchSettingsItemState();
-}
-
-class _SwitchSettingsItemState extends State<SwitchSettingsItem> {
-  bool _isSwitched = true;
   void _toggleSwitch(bool value) {
-    setState(() {
-      _isSwitched = value;
-    });
+    onChanged(value);
   }
 
   @override
@@ -35,14 +27,14 @@ class _SwitchSettingsItemState extends State<SwitchSettingsItem> {
           child: Row(
             children: [
               Text(
-                widget.title,
+                title,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               Expanded(
                 child: Container(
                     alignment: Alignment.centerRight,
                     child: Switch(
-                      value: _isSwitched,
+                      value: isEnabled,
                       onChanged: _toggleSwitch,
                     )),
               )

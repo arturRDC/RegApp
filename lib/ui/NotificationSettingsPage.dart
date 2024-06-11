@@ -19,19 +19,36 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   bool snoozeEnabled = true;
 
   void handleNotificationSetting(bool state) {
-    notificationsEnabled = state;
+    setState(() {
+      notificationsEnabled = state;
+      if (state == false) {
+        soundEnabled = false;
+        vibrationEnabled = false;
+        snoozeEnabled = false;
+      }
+      print('notificationsEnabled $notificationsEnabled');
+      print('soundEnabled $soundEnabled');
+      print('vibrationEnabled $vibrationEnabled');
+      print('snoozeEnabled $snoozeEnabled');
+    });
   }
 
   void handleSoundSetting(bool state) {
-    soundEnabled = state;
+    setState(() {
+      soundEnabled = state;
+    });
   }
 
   void handleVibrationSetting(bool state) {
-    vibrationEnabled = state;
+    setState(() {
+      vibrationEnabled = state;
+    });
   }
 
   void handleSnoozeSetting(bool state) {
-    snoozeEnabled = state;
+    setState(() {
+      snoozeEnabled = state;
+    });
   }
 
   @override
@@ -54,23 +71,23 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 child: SwitchSettingsItem(
                   title: 'Ativar notificações',
                   onChanged: handleNotificationSetting,
-                  isEnabled: true,
+                  isEnabled: notificationsEnabled,
                 ),
               ),
               SwitchSettingsItem(
                 title: 'Reproduzir som',
                 onChanged: handleSoundSetting,
-                isEnabled: true,
+                isEnabled: soundEnabled,
               ),
               SwitchSettingsItem(
                 title: 'Vibrar',
                 onChanged: handleVibrationSetting,
-                isEnabled: true,
+                isEnabled: vibrationEnabled,
               ),
               SwitchSettingsItem(
                 title: 'Ativar Soneca',
                 onChanged: handleSnoozeSetting,
-                isEnabled: true,
+                isEnabled: snoozeEnabled,
               ),
             ],
           ),
