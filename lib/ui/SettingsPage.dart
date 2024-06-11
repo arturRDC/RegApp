@@ -65,7 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
           SettingsItem(
             title: 'Logout',
-            onPress: () {},
+            onPress: () => context.go('/login'),
           ),
         ],
       ),

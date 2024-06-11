@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/AddPlantPage.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
 import 'package:regapp/ui/EditPlantPage.dart';
+import 'package:regapp/ui/LoginPage.dart';
 import 'package:regapp/ui/ResetPasswordPage.dart';
 import 'package:regapp/ui/HomePage.dart';
 import 'package:regapp/ui/IdentifyPlantErrorPage.dart';
@@ -43,7 +44,7 @@ class CustomNavigationHelper {
 
   static const String newUserPath = '/newUser';
   static const String createAccountPath = '/createAccount';
-  static const String signInPath = '/login';
+  static const String loginPath = '/login';
   static const String resetPasswordPath = '/resetPassword';
 
   static const String homePath = '/home';
@@ -203,6 +204,16 @@ class CustomNavigationHelper {
         pageBuilder: (context, GoRouterState state) {
           return getPage(
             child: const ResetPasswordPage(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        path: loginPath,
+        name: 'Login',
+        pageBuilder: (context, GoRouterState state) {
+          return getPage(
+            child: const Login(),
             state: state,
           );
         },
