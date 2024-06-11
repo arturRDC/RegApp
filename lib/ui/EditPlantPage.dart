@@ -240,7 +240,9 @@ class _EditPlantPageState extends State<EditPlantPage> {
                   ),
                   TextFormField(
                     controller: volumeController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
+                            suffixText: 'ml',
                             border: const OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(4))),
