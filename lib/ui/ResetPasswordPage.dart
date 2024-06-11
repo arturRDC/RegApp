@@ -19,8 +19,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Icon(Icons.eco,
-                    size: 120, color: Theme.of(context).colorScheme.primary),
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Image.asset(
+                    'assets/images/regAppLogo.png',
+                    width: 112,
+                    height: 153,
+                  ),
+                ),
                 TextFormField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
