@@ -39,7 +39,9 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 16.0),
-              child: SettingsItemRounded(title: 'Notificações', onPress: () {}),
+              child: SettingsItemRounded(
+                  title: 'Notificações e alarmes',
+                  onPress: () => context.push('/settings/notifications')),
             ),
             SettingsItem(
               title: 'Compartilhar plano',

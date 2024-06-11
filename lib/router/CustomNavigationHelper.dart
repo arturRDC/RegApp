@@ -4,6 +4,7 @@ import 'package:regapp/ui/AddPlantPage.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
 import 'package:regapp/ui/EditPlantPage.dart';
 import 'package:regapp/ui/LoginPage.dart';
+import 'package:regapp/ui/NotificationSettingsPage.dart';
 import 'package:regapp/ui/ResetPasswordPage.dart';
 import 'package:regapp/ui/HomePage.dart';
 import 'package:regapp/ui/IdentifyPlantErrorPage.dart';
@@ -51,6 +52,7 @@ class CustomNavigationHelper {
   static const String weatherPath = '/weather';
   static const String plantsPath = '/plants';
   static const String settingsPath = '/settings';
+  static const String notificationSettingsPath = '/settings/notifications';
   static const String irrigationsPath = '/irrigations';
   static const String addPlantsPath = '/plants/addPlant';
   static const String editPlantsPath = '/plants/editPlant/:id';
@@ -214,6 +216,16 @@ class CustomNavigationHelper {
         pageBuilder: (context, GoRouterState state) {
           return getPage(
             child: const Login(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        path: notificationSettingsPath,
+        name: 'Notificações e alarmes',
+        pageBuilder: (context, GoRouterState state) {
+          return getPage(
+            child: const NotificationSettingsPage(),
             state: state,
           );
         },
