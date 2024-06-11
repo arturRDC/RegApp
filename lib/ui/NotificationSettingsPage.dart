@@ -26,10 +26,6 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
         vibrationEnabled = false;
         snoozeEnabled = false;
       }
-      print('notificationsEnabled $notificationsEnabled');
-      print('soundEnabled $soundEnabled');
-      print('vibrationEnabled $vibrationEnabled');
-      print('snoozeEnabled $snoozeEnabled');
     });
   }
 
