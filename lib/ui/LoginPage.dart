@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
@@ -11,6 +12,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +40,7 @@ class _LoginState extends State<Login> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       TextFormField(
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "Email",
@@ -47,6 +52,7 @@ class _LoginState extends State<Login> {
                       ),
                       const SizedBox(height: 15),
                       TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
                         decoration: InputDecoration(
@@ -63,7 +69,10 @@ class _LoginState extends State<Login> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
-                              context.go('/home');
+                              // context.go('/home');
+                              FirebaseAuth.instance.signInWithEmailAndPassword(
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text.trim());
                             },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
