@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/components/IrrigationList.dart';
@@ -28,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       greeting = 'Boa Noite';
     }
 
-    const user = 'User';
+    String? user = FirebaseAuth.instance.currentUser?.displayName;
 
     return Container(
       padding: const EdgeInsets.all(24.0),
