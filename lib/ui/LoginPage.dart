@@ -15,6 +15,15 @@ class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  void _login(BuildContext context) async {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim());
+    if (context.mounted) {
+      context.go('/home');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,12 +77,7 @@ class _LoginState extends State<Login> {
                         child: ButtonTheme(
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {
-                              // context.go('/home');
-                              FirebaseAuth.instance.signInWithEmailAndPassword(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text.trim());
-                            },
+                            onPressed: () => {_login(context)},
                             style: ElevatedButton.styleFrom(
                                 backgroundColor:
                                     Theme.of(context).colorScheme.primary),
