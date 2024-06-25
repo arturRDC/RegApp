@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -13,10 +14,29 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   int currentPageIndex = 0;
-  Map<String, String> user = {
-    'username': 'joao.p.2001',
-    'name': 'João Pedro',
-  };
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? user;
+  String? name;
+  String? username;
+
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser;
+    name = user?.displayName;
+    _fetchUsername();
+  }
+
+  Future<void> _fetchUsername() async {
+    final docSnapshot =
+        await _firestore.collection('users').doc(user?.uid).get();
+    if (docSnapshot.exists) {
+      setState(() {
+        username = docSnapshot.data()?['username'];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -29,13 +49,13 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: const EdgeInsets.only(top: 32.0),
               child: SettingsItemRounded(
                 title: 'Nome de usuário',
-                textRight: user['username']!,
+                textRight: username != null ? username! : '',
                 onPress: () {},
               ),
             ),
             SettingsItem(
               title: 'Nome',
-              textRight: user['name']!,
+              textRight: name != null ? name! : '',
               onPress: () {},
             ),
             Padding(
