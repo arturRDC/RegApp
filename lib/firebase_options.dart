@@ -59,4 +59,5 @@ class DefaultFirebaseOptions {
     projectId: 'regapp-8a842',
     storageBucket: 'regapp-8a842.appspot.com',
   );
+
 }

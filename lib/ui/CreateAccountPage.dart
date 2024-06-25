@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/LoginPage.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -9,15 +11,6 @@ class CreateAccount extends StatefulWidget {
   State<CreateAccount> createState() => _CreateAccountState();
 }
 
-/*appBar: AppBar(
-      title: const Text('Criar Conta')
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: <Color>[const Color(0xFFF1F5EC), Theme.of(context).colorScheme.secondaryContainer]),
-          )
-      )*/
-
 class _CreateAccountState extends State<CreateAccount> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
@@ -25,6 +18,8 @@ class _CreateAccountState extends State<CreateAccount> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordConfirmationController =
       TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +134,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
-                            FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                                    email: _emailController.text.trim(),
-                                    password: _passwordController.text.trim());
+                            _registerUser(context);
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
@@ -158,5 +150,36 @@ class _CreateAccountState extends State<CreateAccount> {
                 ],
               ))),
         ));
+  }
+
+  void _registerUser(BuildContext context) async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String firstName = _firstNameController.text.trim();
+    String username = _usernameController.text.trim();
+
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        await user.updateProfile(displayName: firstName);
+
+        await _firestore.collection('users').doc(user.uid).set({
+          'username': username,
+        });
+
+        if (context.mounted) {
+          context.go('/home');
+        }
+      }
+    } catch (e) {
+      print('Error creating user: $e');
+    }
   }
 }
