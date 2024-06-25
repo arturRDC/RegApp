@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/LoginPage.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -8,16 +11,16 @@ class CreateAccount extends StatefulWidget {
   State<CreateAccount> createState() => _CreateAccountState();
 }
 
-/*appBar: AppBar(
-      title: const Text('Criar Conta')
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: <Color>[const Color(0xFFF1F5EC), Theme.of(context).colorScheme.secondaryContainer]),
-          )
-      )*/
-
 class _CreateAccountState extends State<CreateAccount> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordConfirmationController =
+      TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +29,6 @@ class _CreateAccountState extends State<CreateAccount> {
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
           child: SizedBox(
               height: MediaQuery.of(context).size.height - 153,
-              // alignment: Alignment.center,
               child: Form(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,6 +45,7 @@ class _CreateAccountState extends State<CreateAccount> {
                   Column(
                     children: [
                       TextFormField(
+                        controller: _firstNameController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Primeiro Nome",
@@ -54,6 +57,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       const SizedBox(height: 15),
                       TextFormField(
+                        controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
                           labelText: "Email",
@@ -65,6 +69,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       const SizedBox(height: 15),
                       TextFormField(
+                        controller: _usernameController,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                           labelText: "Nome de usuário",
@@ -76,6 +81,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       const SizedBox(height: 15),
                       TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
                         decoration: InputDecoration(
@@ -88,6 +94,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       ),
                       const SizedBox(height: 15),
                       TextFormField(
+                        controller: _passwordConfirmationController,
                         obscureText: true,
                         keyboardType: TextInputType.visiblePassword,
                         decoration: InputDecoration(
@@ -126,7 +133,9 @@ class _CreateAccountState extends State<CreateAccount> {
                       ButtonTheme(
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _registerUser(context);
+                          },
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
                                   Theme.of(context).colorScheme.primary),
@@ -141,5 +150,36 @@ class _CreateAccountState extends State<CreateAccount> {
                 ],
               ))),
         ));
+  }
+
+  void _registerUser(BuildContext context) async {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    String firstName = _firstNameController.text.trim();
+    String username = _usernameController.text.trim();
+
+    try {
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        await user.updateProfile(displayName: firstName);
+
+        await _firestore.collection('users').doc(user.uid).set({
+          'username': username,
+        });
+
+        if (context.mounted) {
+          context.go('/home');
+        }
+      }
+    } catch (e) {
+      print('Error creating user: $e');
+    }
   }
 }

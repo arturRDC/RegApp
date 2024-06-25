@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/AddPlantPage.dart';
@@ -235,6 +236,16 @@ class CustomNavigationHelper {
     router = GoRouter(
       navigatorKey: parentNavigatorKey,
       initialLocation: newUserPath,
+      redirect: (context, state) {
+        final user = FirebaseAuth.instance.currentUser;
+        // user is logged in and on the newUserPage
+        if (user != null && state.fullPath == newUserPath) {
+          return homePath;
+        } else {
+          // User is not logged in, allow navigation to new user page
+          return null;
+        }
+      },
       routes: routes,
     );
   }

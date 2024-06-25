@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "496512734731",
+    "project_id": "regapp-8a842",
+    "storage_bucket": "regapp-8a842.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:496512734731:android:0aaa5024e0ebc37887d90e",
+        "android_client_info": {
+          "package_name": "com.example.regapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWgBzftsxQS9uK_TwwpivCsnX_MTF4FCI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/ui/components/SettingsItem.dart';
@@ -68,11 +69,16 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             SettingsItem(
               title: 'Logout',
-              onPress: () => context.go('/login'),
+              onPress: () => {_logout()},
             ),
           ],
         ),
       ),
     );
+  }
+
+  void _logout() async {
+    FirebaseAuth.instance.signOut();
+    context.go('/login');
   }
 }
