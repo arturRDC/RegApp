@@ -1,57 +1,71 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:regapp/models/Plant.dart';
 import 'package:regapp/ui/components/PlantCard.dart';
 
-class PlantList extends StatelessWidget {
-  PlantList({super.key});
+class PlantList extends StatefulWidget {
+  const PlantList({super.key});
 
-  final List<Map<String, String>> irrigationData = [
-    {
-      'id': '1',
-      'title': 'Samambaia',
-      'timeLeft': '15 min',
-      'location': 'Interna',
-      'waterNeeds': '150'
-    },
-    {
-      'id': '2',
-      'title': 'Orquídea',
-      'timeLeft': '25 min',
-      'location': 'Interna',
-      'waterNeeds': '200'
-    },
-    {
-      'id': '3',
-      'title': 'Bromélia',
-      'timeLeft': '35 min',
-      'location': 'Interna',
-      'waterNeeds': '300'
-    },
-  ];
+  @override
+  State<PlantList> createState() => _PlantListState();
+}
+
+class _PlantListState extends State<PlantList> {
+  List<Plant>? plants;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Stream<QuerySnapshot> getPlantsStream() {
+    return FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection('plants')
+        .snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: _buildPlantCards(),
-    );
-  }
+    return StreamBuilder<QuerySnapshot>(
+        stream: getPlantsStream(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          }
 
-  List<Widget> _buildPlantCards() {
-    List<Widget> plantCards = [];
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+          if (snapshot.data == null) return const CircularProgressIndicator();
+          List<Plant> plants = snapshot.data!.docs.map((doc) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            Plant plant = Plant(
+              id: doc.id,
+              title: data['title'],
+              imageUrl: data['imageUrl'],
+              waterNeeds: data['waterNeeds'].toString(),
+              location: data['location'],
+              frequency: Set<String>.from(data['frequency']),
+              time: data['time'],
+            );
+            return plant;
+          }).toList();
 
-    for (var plant in irrigationData) {
-      plantCards.add(
-        PlantCard(
-          id: plant['id']!,
-          title: plant['title']!,
-          timeLeft: plant['timeLeft']!,
-          waterNeeds: plant['waterNeeds']!,
-          location: plant['location']!,
-        ),
-      );
-      plantCards.add(const SizedBox(height: 8));
-    }
-
-    return plantCards;
+          return ListView.builder(
+            itemCount: plants.length,
+            itemBuilder: (context, index) {
+              return PlantCard(
+                id: plants[index].id,
+                title: plants[index].title,
+                timeLeft: plants[index].time, // todo
+                waterNeeds: plants[index].waterNeeds.toString(),
+                location: plants[index].location,
+              );
+            },
+          );
+        });
   }
 }

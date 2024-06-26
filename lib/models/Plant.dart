@@ -1,12 +1,14 @@
 class Plant {
+  final String id;
   final String title;
   final String imageUrl;
-  final int waterNeeds;
+  final String waterNeeds;
   final String location;
   final Set<String> frequency;
   final String time;
 
   Plant({
+    required this.id,
     required this.title,
     required this.imageUrl,
     required this.waterNeeds,
@@ -17,6 +19,7 @@ class Plant {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'imageUrl': imageUrl,
       'waterNeeds': waterNeeds,
