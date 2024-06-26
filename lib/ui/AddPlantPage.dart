@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
+import 'package:regapp/models/Plant.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
 class AddPlantPage extends StatefulWidget {
@@ -11,6 +14,7 @@ class AddPlantPage extends StatefulWidget {
 }
 
 class _AddPlantPageState extends State<AddPlantPage> {
+  final User? _loggedInUser = FirebaseAuth.instance.currentUser;
   String fileName = '';
   PlatformFile? pickedFile;
   String? selectedOption = '';
@@ -58,6 +62,26 @@ class _AddPlantPageState extends State<AddPlantPage> {
 
     if (chosen != null) {
       setState(() => _time = chosen);
+    }
+  }
+
+  Future<void> _savePlant() async {
+    try {
+      String? userId = _loggedInUser?.uid;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('plants')
+          .add({
+        'title': nameController.text.trim(),
+        'imageUrl': '',
+        'waterNeeds': volumeController.text.trim(),
+        'location': selectedOption,
+        'frequency': frequency,
+        'time': '${_time.hour}:${_time.minute}',
+      });
+    } catch (e) {
+      print('Error saving plant: $e');
     }
   }
 
@@ -314,9 +338,9 @@ class _AddPlantPageState extends State<AddPlantPage> {
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      // Handle form submission
-                      context.pop();
+                    onPressed: () async {
+                      await _savePlant();
+                      if (context.mounted) context.pop();
                     },
                     child: Text(
                       'Adicionar planta',
