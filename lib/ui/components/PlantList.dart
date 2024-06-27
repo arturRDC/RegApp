@@ -61,7 +61,7 @@ class _PlantListState extends State<PlantList> {
               return PlantCard(
                 id: plants[index].id,
                 title: plants[index].title,
-                timeLeft: plants[index].time, // todo
+                time: plants[index].time,
                 waterNeeds: plants[index].waterNeeds.toString(),
                 location: plants[index].location,
               );

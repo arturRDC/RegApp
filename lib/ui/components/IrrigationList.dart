@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,55 @@ class _IrrigationListState extends State<IrrigationList> {
   @override
   void initState() {
     super.initState();
+  }
+
+  Map<String, int> weekdayMap = {
+    'Seg': DateTime.monday,
+    'Ter': DateTime.tuesday,
+    'Qua': DateTime.wednesday,
+    'Qui': DateTime.thursday,
+    'Sex': DateTime.friday,
+    'Sab': DateTime.saturday,
+    'Dom': DateTime.sunday,
+  };
+
+  DateTime _getNextIrrigation(Set<String> dayAbbrs, String timeString) {
+    final now = DateTime.now();
+    var targetWeekdays = dayAbbrs.map((abbr) => weekdayMap[abbr] ?? -1).toSet();
+
+    if (targetWeekdays.contains(-1)) {
+      throw ArgumentError('Invalid day abbreviation');
+    }
+
+    // Parse the time string
+    List<String> timeParts = timeString.split(':');
+    if (timeParts.length != 2) {
+      throw ArgumentError('Invalid time format. Use HH:MM');
+    }
+
+    int hour = int.parse(timeParts[0]);
+    int minute = int.parse(timeParts[1]);
+
+    if (hour < 0 || hour > 23 || minute < 0 || minute > 59) {
+      throw ArgumentError('Invalid time values');
+    }
+
+    DateTime closest =
+        now.add(const Duration(days: 7)); // Start with a week from now
+
+    for (int i = 0; i < 7; i++) {
+      var candidate = now.add(Duration(days: i));
+      candidate = DateTime(
+          candidate.year, candidate.month, candidate.day, hour, minute);
+
+      if (targetWeekdays.contains(candidate.weekday) &&
+          candidate.isAfter(now)) {
+        if (candidate.isBefore(closest)) {
+          closest = candidate;
+        }
+      }
+    }
+    return closest;
   }
 
   Stream<QuerySnapshot> getPlantsStream() {
@@ -43,26 +94,40 @@ class _IrrigationListState extends State<IrrigationList> {
           List<Plant> plants = snapshot.data!.docs.map((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             Plant plant = Plant(
-              id: doc.id,
-              title: data['title'],
-              imageUrl: data['imageUrl'],
-              waterNeeds: data['waterNeeds'].toString(),
-              location: data['location'],
-              frequency: Set<String>.from(data['frequency']),
-              time: data['time'],
-            );
+                id: doc.id,
+                title: data['title'],
+                imageUrl: data['imageUrl'],
+                waterNeeds: data['waterNeeds'].toString(),
+                location: data['location'],
+                frequency: Set<String>.from(data['frequency']),
+                time: data['time'],
+                nextIrrigation: _getNextIrrigation(
+                    Set<String>.from(data['frequency']), data['time']));
             return plant;
           }).toList();
 
+          plants.sort((a, b) {
+            if (a.nextIrrigation == null && b.nextIrrigation == null) {
+              return 0;
+            } else if (a.nextIrrigation == null) {
+              return 1;
+            } else if (b.nextIrrigation == null) {
+              return -1;
+            } else {
+              return a.nextIrrigation!.compareTo(b.nextIrrigation!);
+            }
+          });
+
+          List<Plant> irrigations = plants.where((pl) => pl.nextIrrigation != null ).toList();
           return ListView.builder(
-            itemCount: plants.length,
+            itemCount: min(irrigations.length, 4),
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return IrrigationCard(
-                title: plants[index].title,
-                timeLeft: plants[index].time, // todo
-                waterNeeds: plants[index].waterNeeds.toString(),
-                location: plants[index].location,
+                title: irrigations[index].title,
+                nextIrrigation: irrigations[index].nextIrrigation!,
+                waterNeeds: irrigations[index].waterNeeds.toString(),
+                location: irrigations[index].location,
               );
             },
           );

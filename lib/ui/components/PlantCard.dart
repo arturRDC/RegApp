@@ -5,13 +5,13 @@ import 'package:go_router/go_router.dart';
 class PlantCard extends StatelessWidget {
   final String id;
   final String title;
-  final String timeLeft;
+  final String time;
   final String location;
   final String waterNeeds;
   const PlantCard({
     required this.id,
     required this.title,
-    required this.timeLeft,
+    required this.time,
     required this.location,
     required this.waterNeeds,
     super.key,

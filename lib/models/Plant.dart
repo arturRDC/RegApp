@@ -6,16 +6,17 @@ class Plant {
   final String location;
   final Set<String> frequency;
   final String time;
+  DateTime? nextIrrigation;
 
-  Plant({
-    required this.id,
-    required this.title,
-    required this.imageUrl,
-    required this.waterNeeds,
-    required this.location,
-    required this.frequency,
-    required this.time,
-  });
+  Plant(
+      {required this.id,
+      required this.title,
+      required this.imageUrl,
+      required this.waterNeeds,
+      required this.location,
+      required this.frequency,
+      required this.time,
+      this.nextIrrigation});
 
   Map<String, dynamic> toMap() {
     return {
