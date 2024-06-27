@@ -56,6 +56,7 @@ class _PlantListState extends State<PlantList> {
 
           return ListView.builder(
             itemCount: plants.length,
+            shrinkWrap: true,
             itemBuilder: (context, index) {
               return PlantCard(
                 id: plants[index].id,
