@@ -20,15 +20,6 @@ class _EditPlantPageState extends State<EditPlantPage> {
   String? _selectedLocation = '';
   Set<String> _frequency = {};
   TimeOfDay? _time;
-  Plant? plant;
-
-  // Map<String, String> plantData = {
-  //   'id': '3',
-  //   'title': 'Bromélia',
-  //   'frequency': '{Seg, Qua, Sex, Dom}',
-  //   'location': 'Interna',
-  //   'waterNeeds': '300'
-  // };
 
   Plant? _plant;
 
@@ -51,15 +42,22 @@ class _EditPlantPageState extends State<EditPlantPage> {
     _frequency = newFrequency;
   }
 
-  Set<String> freqStrToSet(String freqStr) {
-    // Remove the curly braces
-    String cleanedString = freqStr.replaceAll('{', '').replaceAll('}', '');
+  Plant? plant;
+  void _handleSavePlant() async {
+    DocumentReference plantDocRef = FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection('plants')
+        .doc(widget.id);
 
-    // Split the string into a list of substrings
-    List<String> substrings = cleanedString.split(', ');
-
-    // Create a Set<String> from the list of substrings
-    return Set<String>.from(substrings);
+    await plantDocRef.update({
+      'title': _nameController.text.trim(),
+      'imageUrl': '',
+      'waterNeeds': _volumeController.text.trim(),
+      'location': _selectedLocation,
+      'frequency': _frequency,
+      'time': _time != null ? '${_time?.hour}:${_time?.minute}' : '',
+    });
   }
 
   void _identifyPlant() {
@@ -399,7 +397,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle form submission
+                      _handleSavePlant();
                       context.pop();
                     },
                     child: Text(
