@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:regapp/ui/components/WeekButton.dart';
 
@@ -22,6 +23,16 @@ class _WeekFrequencyInputState extends State<WeekFrequencyInput> {
   void initState() {
     super.initState();
     frequency = widget.defaultFreq;
+  }
+
+  @override
+  void didUpdateWidget(WeekFrequencyInput oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!setEquals<String>(oldWidget.defaultFreq, widget.defaultFreq)) {
+      setState(() {
+        frequency = widget.defaultFreq;
+      });
+    }
   }
 
   @override

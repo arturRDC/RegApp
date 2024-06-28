@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
+import 'package:regapp/models/Plant.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
 class EditPlantPage extends StatefulWidget {
@@ -14,20 +17,23 @@ class EditPlantPage extends StatefulWidget {
 class _EditPlantPageState extends State<EditPlantPage> {
   String fileName = '';
   PlatformFile? pickedFile;
-  String? selectedLocation = '';
-  Set<String> frequency = {};
-  TimeOfDay _time = TimeOfDay.now();
+  String? _selectedLocation = '';
+  Set<String> _frequency = {};
+  TimeOfDay? _time;
+  Plant? plant;
 
-  Map<String, String> plantData = {
-    'id': '3',
-    'title': 'Bromélia',
-    'frequency': '{Seg, Qua, Sex, Dom}',
-    'location': 'Interna',
-    'waterNeeds': '300'
-  };
+  // Map<String, String> plantData = {
+  //   'id': '3',
+  //   'title': 'Bromélia',
+  //   'frequency': '{Seg, Qua, Sex, Dom}',
+  //   'location': 'Interna',
+  //   'waterNeeds': '300'
+  // };
 
-  TextEditingController nameController = TextEditingController();
-  TextEditingController volumeController = TextEditingController();
+  Plant? _plant;
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _volumeController = TextEditingController();
 
   void openFilePicker() async {
     FilePickerResult? result =
@@ -42,7 +48,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
   }
 
   void _handleFreqChange(newFrequency) {
-    frequency = newFrequency;
+    _frequency = newFrequency;
   }
 
   Set<String> freqStrToSet(String freqStr) {
@@ -58,15 +64,15 @@ class _EditPlantPageState extends State<EditPlantPage> {
 
   void _identifyPlant() {
     // if success
-    nameController.text = 'Samambaia';
-    volumeController.text = '300 ml';
+    _nameController.text = 'Samambaia';
+    _volumeController.text = '300 ml';
     // if error
     context.push('/plants/identifyPlantError');
   }
 
   Future<void> _selectTime() async {
     TimeOfDay? chosen = await showTimePicker(
-      initialTime: _time,
+      initialTime: _time!,
       context: context,
       builder: (context, child) {
         return MediaQuery(
@@ -84,11 +90,57 @@ class _EditPlantPageState extends State<EditPlantPage> {
   @override
   void initState() {
     super.initState();
-    nameController.text = plantData['title']!;
-    volumeController.text = plantData['waterNeeds']!;
-    selectedLocation = plantData['location']!;
-    frequency = freqStrToSet(plantData['frequency']!);
-    _time = const TimeOfDay(hour: 08, minute: 30);
+    // _nameController.text = plantData['title']!;
+    // _volumeController.text = plantData['waterNeeds']!;
+    // _selectedLocation = plantData['location']!;
+    // _frequency = freqStrToSet(plantData['frequency']!);
+    // _time = const TimeOfDay(hour: 08, minute: 30);
+    _loadPlantData();
+  }
+
+  void _loadPlantData() async {
+    _plant = await fetchPlantInfo();
+
+    if (_plant != null) {
+      setState(() {
+        _nameController.text = _plant!.title;
+        _volumeController.text = _plant!.waterNeeds;
+        _frequency = _plant!.frequency;
+        var parts = _plant!.time.split(':');
+        _time =
+            TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+        _selectedLocation = _plant!.location;
+      });
+    }
+  }
+
+  Future<Plant?> fetchPlantInfo() async {
+    try {
+      DocumentSnapshot plantDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .collection('plants')
+          .doc(widget.id)
+          .get();
+
+      if (plantDoc.exists) {
+        Map<String, dynamic> data = plantDoc.data() as Map<String, dynamic>;
+        return Plant(
+            id: widget.id,
+            title: data['title'],
+            imageUrl: data['imageUrl'],
+            waterNeeds: data['waterNeeds'].toString(),
+            location: data['location'],
+            frequency: Set<String>.from(data['frequency']),
+            time: data['time']);
+      } else {
+        print('Plant not found');
+        return null;
+      }
+    } catch (e) {
+      print('Error fetching plant info: $e');
+      return null;
+    }
   }
 
   @override
@@ -214,7 +266,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                     ),
                   ),
                   TextFormField(
-                    controller: nameController,
+                    controller: _nameController,
                     decoration: InputDecoration(
                             border: const OutlineInputBorder(
                                 borderRadius:
@@ -239,7 +291,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                     ),
                   ),
                   TextFormField(
-                    controller: volumeController,
+                    controller: _volumeController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                             suffixText: 'ml',
@@ -270,10 +322,10 @@ class _EditPlantPageState extends State<EditPlantPage> {
                         style: Theme.of(context).textTheme.bodyLarge),
                     leading: Radio(
                       value: 'Interna',
-                      groupValue: selectedLocation,
+                      groupValue: _selectedLocation,
                       onChanged: (value) {
                         setState(() {
-                          selectedLocation = value;
+                          _selectedLocation = value;
                         });
                       },
                     ),
@@ -283,10 +335,10 @@ class _EditPlantPageState extends State<EditPlantPage> {
                         style: Theme.of(context).textTheme.bodyLarge),
                     leading: Radio(
                       value: 'Externa',
-                      groupValue: selectedLocation,
+                      groupValue: _selectedLocation,
                       onChanged: (value) {
                         setState(() {
-                          selectedLocation = value;
+                          _selectedLocation = value;
                         });
                       },
                     ),
@@ -306,7 +358,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                   ),
                   WeekFrequencyInput(
                     onFreqChange: _handleFreqChange,
-                    defaultFreq: frequency,
+                    defaultFreq: _frequency,
                   ),
                 ],
               ),
@@ -331,7 +383,9 @@ class _EditPlantPageState extends State<EditPlantPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Text(
-                            "${_time.hour}:${_time.minute.toString().padLeft(2, '0')}",
+                            _time != null
+                                ? "${_time?.hour}:${_time?.minute.toString().padLeft(2, '0')}"
+                                : "",
                             style: Theme.of(context).textTheme.headlineLarge,
                           ),
                         )),
@@ -349,7 +403,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                       context.pop();
                     },
                     child: Text(
-                      'Adicionar planta',
+                      'Salvar planta',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Theme.of(context).colorScheme.onPrimary),
                     ),

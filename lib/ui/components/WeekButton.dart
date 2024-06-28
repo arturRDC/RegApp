@@ -27,6 +27,16 @@ class _WeekButtonState extends State<WeekButton> {
     _isActive = widget.isActive;
   }
 
+  @override
+  void didUpdateWidget(WeekButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isActive != widget.isActive) {
+      setState(() {
+        _isActive = widget.isActive;
+      });
+    }
+  }
+
   void _handleTapWeek() {
     widget.onPressWeek(widget.day, !_isActive);
     setState(() {
