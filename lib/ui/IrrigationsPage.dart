@@ -17,10 +17,10 @@ class IrrigationsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Hoje', style: Theme.of(context).textTheme.headlineSmall),
-              IrrigationList(),
+              const IrrigationList(options: IrrigationOptions.today),
               Text('Proximas',
                   style: Theme.of(context).textTheme.headlineSmall),
-              IrrigationList(),
+              const IrrigationList(options: IrrigationOptions.next),
             ],
           ),
         ),

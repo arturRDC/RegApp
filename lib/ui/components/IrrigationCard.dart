@@ -35,7 +35,7 @@ class _IrrigationCardState extends State<IrrigationCard> {
     } else if (hours > 0) {
       parts.add('$hours ${hours == 1 ? "hora" : "horas"}');
     } else if (minutes > 0) {
-      parts.add('$minutes ${minutes == 1 ? "minuto" : "minutos"}');
+      parts.add('$minutes min');
     }
 
     if (parts.isEmpty) {

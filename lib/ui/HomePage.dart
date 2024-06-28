@@ -56,9 +56,11 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: IrrigationList(),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: IrrigationList(
+                options: IrrigationOptions.all,
+              ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 32),

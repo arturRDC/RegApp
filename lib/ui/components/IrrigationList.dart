@@ -6,8 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:regapp/models/Plant.dart';
 import 'package:regapp/ui/components/IrrigationCard.dart';
 
+enum IrrigationOptions {
+  today,
+  next,
+  all,
+}
+
 class IrrigationList extends StatefulWidget {
-  const IrrigationList({super.key});
+  final IrrigationOptions options;
+  const IrrigationList({required this.options, super.key});
 
   @override
   State<IrrigationList> createState() => _IrrigationListState();
@@ -117,8 +124,33 @@ class _IrrigationListState extends State<IrrigationList> {
               return a.nextIrrigation!.compareTo(b.nextIrrigation!);
             }
           });
-
-          List<Plant> irrigations = plants.where((pl) => pl.nextIrrigation != null ).toList();
+          List<Plant> irrigations = List.empty();
+          switch (widget.options) {
+            case IrrigationOptions.today:
+              irrigations = plants.where((pl) {
+                if (pl.nextIrrigation != null &&
+                    pl.nextIrrigation?.day == DateTime.now().day) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }).toList();
+              break;
+            case IrrigationOptions.next:
+              irrigations = plants.where((pl) {
+                if (pl.nextIrrigation != null &&
+                    pl.nextIrrigation?.day != DateTime.now().day) {
+                  return true;
+                } else {
+                  return false;
+                }
+              }).toList();
+            case IrrigationOptions.all:
+              irrigations = plants.where((pl) {
+                return pl.nextIrrigation != null;
+              }).toList();
+            default:
+          }
           return ListView.builder(
             itemCount: min(irrigations.length, 4),
             shrinkWrap: true,
