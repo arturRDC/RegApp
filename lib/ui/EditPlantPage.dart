@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
@@ -42,8 +45,34 @@ class _EditPlantPageState extends State<EditPlantPage> {
     _frequency = newFrequency;
   }
 
-  Plant? plant;
+  Future<String> _uploadImageToStorage(File imageFile) async {
+    User? loggedInUser = FirebaseAuth.instance.currentUser;
+    if (loggedInUser == null) return '';
+    String userId = loggedInUser.uid;
+
+    if (_plant == null) {
+      return '';
+    }
+
+    final Reference storageRef = FirebaseStorage.instance
+        .ref()
+        .child('users/$userId/plants/${_plant!.id}');
+
+    try {
+      TaskSnapshot snapshot = await storageRef.putFile(imageFile);
+      String fileUrl = await snapshot.ref.getDownloadURL();
+      return fileUrl;
+    } on FirebaseException catch (e) {
+      return '$e';
+    }
+  }
+
   void _handleSavePlant() async {
+    String imageUrl = '';
+    if (pickedFile != null && pickedFile!.path != null) {
+      File firebaseFile = File(pickedFile!.path!);
+      imageUrl = await _uploadImageToStorage(firebaseFile);
+    }
     DocumentReference plantDocRef = FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -52,7 +81,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
 
     await plantDocRef.update({
       'title': _nameController.text.trim(),
-      'imageUrl': '',
+      'imageUrl': imageUrl,
       'waterNeeds': _volumeController.text.trim(),
       'location': _selectedLocation,
       'frequency': _frequency,
@@ -88,11 +117,6 @@ class _EditPlantPageState extends State<EditPlantPage> {
   @override
   void initState() {
     super.initState();
-    // _nameController.text = plantData['title']!;
-    // _volumeController.text = plantData['waterNeeds']!;
-    // _selectedLocation = plantData['location']!;
-    // _frequency = freqStrToSet(plantData['frequency']!);
-    // _time = const TimeOfDay(hour: 08, minute: 30);
     _loadPlantData();
   }
 
@@ -141,6 +165,27 @@ class _EditPlantPageState extends State<EditPlantPage> {
     }
   }
 
+  Widget _getPlantImage() {
+    if (pickedFile != null && pickedFile!.bytes != null) {
+      return Image.memory(
+        pickedFile!.bytes!,
+        fit: BoxFit.cover,
+      );
+    } else if (_plant != null && _plant!.imageUrl != '') {
+      return Image.network(
+        _plant!.imageUrl,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Image.asset(
+          'assets/icons/pottedPlantIcon.png',
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,18 +215,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                       AspectRatio(
                         aspectRatio: 1.0,
                         child: ClipOval(
-                          child:
-                              (pickedFile != null && pickedFile!.bytes != null)
-                                  ? Image.memory(
-                                      pickedFile!.bytes!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        'assets/icons/pottedPlantIcon.png',
-                                      ),
-                                    ),
+                          child: _getPlantImage(),
                         ),
                       ),
                     ],
