@@ -64,6 +64,7 @@ class _PlantListState extends State<PlantList> {
                 time: plants[index].time,
                 waterNeeds: plants[index].waterNeeds.toString(),
                 location: plants[index].location,
+                imageUrl: plants[index].imageUrl
               );
             },
           );

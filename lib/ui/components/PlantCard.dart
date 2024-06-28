@@ -8,15 +8,35 @@ class PlantCard extends StatelessWidget {
   final String time;
   final String location;
   final String waterNeeds;
+  final String imageUrl;
   const PlantCard({
     required this.id,
     required this.title,
     required this.time,
     required this.location,
     required this.waterNeeds,
+    required this.imageUrl,
     super.key,
   });
 
+  Widget _getPlantImage() {
+    if (imageUrl.isEmpty) {
+      return Image.asset(
+        'assets/icons/pottedPlantIcon.png',
+        height: 69,
+        width: 59,
+      );
+    } else {
+      return ClipOval(
+          child: Image.network(
+        imageUrl,
+        height: 59,
+        width: 59,
+        fit: BoxFit.cover,
+      ));
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -73,11 +93,7 @@ class PlantCard extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    'assets/icons/pottedPlantIcon.png',
-                    height: 69,
-                    width: 59,
-                  ),
+                  child: _getPlantImage(),
                 ),
               ],
             ),

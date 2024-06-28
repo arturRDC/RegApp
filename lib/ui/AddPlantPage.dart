@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
@@ -65,10 +68,27 @@ class _AddPlantPageState extends State<AddPlantPage> {
     }
   }
 
+  Future<String> _uploadImageToStorage(File imageFile, String plantId) async {
+    User? loggedInUser = FirebaseAuth.instance.currentUser;
+    if (loggedInUser == null) return '';
+    String userId = loggedInUser.uid;
+
+    final Reference storageRef =
+        FirebaseStorage.instance.ref().child('users/$userId/plants/$plantId');
+
+    try {
+      TaskSnapshot snapshot = await storageRef.putFile(imageFile);
+      String fileUrl = await snapshot.ref.getDownloadURL();
+      return fileUrl;
+    } on FirebaseException catch (e) {
+      return '$e';
+    }
+  }
+
   Future<void> _savePlant() async {
     try {
       String? userId = _loggedInUser?.uid;
-      await FirebaseFirestore.instance
+      DocumentReference newPlant = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .collection('plants')
@@ -80,8 +100,37 @@ class _AddPlantPageState extends State<AddPlantPage> {
         'frequency': frequency,
         'time': '${_time.hour}:${_time.minute}',
       });
+      String imageUrl = '';
+      if (pickedFile != null && pickedFile!.path != null) {
+        File firebaseFile = File(pickedFile!.path!);
+        imageUrl = await _uploadImageToStorage(firebaseFile, newPlant.id);
+      }
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser?.uid)
+          .collection('plants')
+          .doc(newPlant.id)
+          .update({
+        'imageUrl': imageUrl,
+      });
     } catch (e) {
       print('Error saving plant: $e');
+    }
+  }
+
+  Widget _getPlantImage() {
+    if (pickedFile != null && pickedFile!.bytes != null) {
+      return Image.memory(
+        pickedFile!.bytes!,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Image.asset(
+          'assets/icons/pottedPlantIcon.png',
+        ),
+      );
     }
   }
 
@@ -114,18 +163,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
                       AspectRatio(
                         aspectRatio: 1.0,
                         child: ClipOval(
-                          child:
-                              (pickedFile != null && pickedFile!.bytes != null)
-                                  ? Image.memory(
-                                      pickedFile!.bytes!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Image.asset(
-                                        'assets/icons/pottedPlantIcon.png',
-                                      ),
-                                    ),
+                          child: _getPlantImage(),
                         ),
                       ),
                     ],

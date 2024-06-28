@@ -160,6 +160,7 @@ class _IrrigationListState extends State<IrrigationList> {
                 nextIrrigation: irrigations[index].nextIrrigation!,
                 waterNeeds: irrigations[index].waterNeeds.toString(),
                 location: irrigations[index].location,
+                imageUrl: irrigations[index].imageUrl,
               );
             },
           );

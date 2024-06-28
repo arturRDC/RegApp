@@ -6,11 +6,13 @@ class IrrigationCard extends StatefulWidget {
   final DateTime nextIrrigation;
   final String location;
   final String waterNeeds;
+  final String imageUrl;
   const IrrigationCard({
     required this.title,
     required this.nextIrrigation,
     required this.location,
     required this.waterNeeds,
+    required this.imageUrl,
     super.key,
   });
 
@@ -20,6 +22,24 @@ class IrrigationCard extends StatefulWidget {
 
 class _IrrigationCardState extends State<IrrigationCard> {
   var now = DateTime.now();
+
+  Widget _getPlantImage() {
+    if (widget.imageUrl.isEmpty) {
+      return Image.asset(
+        'assets/icons/pottedPlantIcon.png',
+        height: 69,
+        width: 59,
+      );
+    } else {
+      return ClipOval(
+          child: Image.network(
+        widget.imageUrl,
+        height: 59,
+        width: 59,
+        fit: BoxFit.cover,
+      ));
+    }
+  }
 
   String _getTimeLeft(DateTime nextIrrigation) {
     Duration difference = nextIrrigation.difference(now);
@@ -110,11 +130,7 @@ class _IrrigationCardState extends State<IrrigationCard> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Image.asset(
-                    'assets/icons/pottedPlantIcon.png',
-                    height: 69,
-                    width: 59,
-                  ),
+                  child: _getPlantImage(),
                 ),
               ],
             ),
