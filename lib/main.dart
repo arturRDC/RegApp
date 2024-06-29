@@ -12,6 +12,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   CustomNavigationHelper.instance;
+  await NotificationService.configureLocalTimeZone();
   NotificationService.init();
   runApp(const MyApp());
 }

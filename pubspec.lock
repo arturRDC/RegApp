@@ -267,6 +267,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_timezone:
+    dependency: "direct main"
+    description:
+      name: flutter_timezone
+      sha256: "06b35132c98fa188db3c4b654b7e1af7ccd01dfe12a004d58be423357605fb24"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   flutter_verification_code:
     dependency: "direct main"
     description:
@@ -312,6 +320,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  js:
+    dependency: transitive
+    description:
+      name: js
+      sha256: c1b2e9b5ea78c45e1a0788d29606ba27dc5f71f019f32ca5140f61ef071838cf
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -518,7 +534,7 @@ packages:
     source: hosted
     version: "0.6.1"
   timezone:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: timezone
       sha256: a6ccda4a69a442098b602c44e61a1e2b4bf6f5516e875bbf0f427d5df14745d5
