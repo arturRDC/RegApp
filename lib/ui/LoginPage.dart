@@ -16,11 +16,21 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login(BuildContext context) async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim());
-    if (context.mounted) {
-      context.go('/home');
+      if (context.mounted) {
+        context.go('/home');
+      }
+    } on FirebaseAuthException catch(e){
+      print(e);
+      showDialog(context: context, 
+      builder: (context){
+        return AlertDialog(
+          content: Text(e.message.toString()),
+          );
+      });
     }
   }
 
