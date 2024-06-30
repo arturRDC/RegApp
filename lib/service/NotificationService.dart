@@ -1,7 +1,18 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
+import 'package:timezone/standalone.dart';
 import 'package:timezone/timezone.dart' as tz;
+
+var weekDayToId = {
+  'Seg': 1,
+  'Ter': 2,
+  'Qua': 3,
+  'Qui': 4,
+  'Sex': 5,
+  'Sab': 6,
+  'Dom': 7
+};
 
 class NotificationService {
   static final _notification = FlutterLocalNotificationsPlugin();
@@ -12,26 +23,50 @@ class NotificationService {
         iOS: DarwinInitializationSettings()));
   }
 
-  static pushNotification({required String title, required String body}) async {
-    var androidDetails = const AndroidNotificationDetails(
-        'important_channel', 'RegApp channel',
-        importance: Importance.max, priority: Priority.high);
+  static int _getNotificationId(int plantId, int dayOfTheWeek) {
+    return 7 * plantId + dayOfTheWeek;
+  }
 
-    var iosDetails = const DarwinNotificationDetails();
+  static Future<void> cancelAllPlantNotifications(int plantId) async {
+    var firstNoti = _getNotificationId(plantId, 1);
+    var lastNoti = _getNotificationId(plantId, 7);
+    for (var noti = firstNoti; noti <= lastNoti; noti++) {
+      _notification.cancel(noti);
+    }
+  }
 
-    var notificationDetails =
-        NotificationDetails(android: androidDetails, iOS: iosDetails);
-    _notification.show(100, title, body, notificationDetails);
+  static Future<void> cancelAllNotifications() async {
+    _notification.cancelAll();
+  }
+
+  static TZDateTime _getNextWeekDay(int wId, int hour, int minutes) {
+    final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minutes);
+
+    while (scheduledDate.weekday != wId) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+    return scheduledDate;
+  }
+
+  static Future<void> addPlantNotifications(
+      int plantId, Set<String> frequency, int hour, minutes) async {
+    for (var weekDay in frequency) {
+      var wId = weekDayToId[weekDay]!;
+      TZDateTime nextWeekDay = _getNextWeekDay(wId, hour, minutes);
+      int notiId = _getNotificationId(plantId, wId);
+      weeklyScheduleNotification(nextWeekDay, notiId);
+    }
   }
 
   static Future<void> weeklyScheduleNotification(
-      DateTime dateTime, int hour, int minutes) async {
+      TZDateTime dateTime, int notiId) async {
     await _notification.zonedSchedule(
-      2000,
+      notiId,
       'title',
       'body',
-      tz.TZDateTime(tz.local, dateTime.year, dateTime.month, dateTime.day, hour,
-          minutes, dateTime.weekday),
+      dateTime,
       const NotificationDetails(
           android: AndroidNotificationDetails(
               'regapp_irrigations', 'Irrigações',
