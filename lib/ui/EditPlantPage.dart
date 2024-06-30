@@ -5,8 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/models/Plant.dart';
+import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
 class EditPlantPage extends StatefulWidget {
@@ -68,25 +70,44 @@ class _EditPlantPageState extends State<EditPlantPage> {
   }
 
   void _handleSavePlant() async {
-    String imageUrl = '';
-    if (pickedFile != null && pickedFile!.path != null) {
-      File firebaseFile = File(pickedFile!.path!);
-      imageUrl = await _uploadImageToStorage(firebaseFile);
-    }
-    DocumentReference plantDocRef = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser?.uid)
-        .collection('plants')
-        .doc(widget.id);
+    try {
+      String imageUrl = '';
+      if (pickedFile != null && pickedFile!.path != null) {
+        File firebaseFile = File(pickedFile!.path!);
+        imageUrl = await _uploadImageToStorage(firebaseFile);
+      }
+      var userId = FirebaseAuth.instance.currentUser?.uid;
+      DocumentReference plantDocRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('plants')
+          .doc(widget.id);
+      int plantId = 0;
+      DocumentSnapshot snapshot = await plantDocRef.get();
+      if (snapshot.exists) {
+        plantId = snapshot.get('plantId');
+      } else {
+        throw Error();
+      }
 
-    await plantDocRef.update({
-      'title': _nameController.text.trim(),
-      'imageUrl': imageUrl,
-      'waterNeeds': _volumeController.text.trim(),
-      'location': _selectedLocation,
-      'frequency': _frequency,
-      'time': _time != null ? '${_time?.hour}:${_time?.minute}' : '',
-    });
+      if (_time == null) {
+        throw Error();
+      }
+
+      await plantDocRef.update({
+        'title': _nameController.text.trim(),
+        'imageUrl': imageUrl,
+        'waterNeeds': _volumeController.text.trim(),
+        'location': _selectedLocation,
+        'frequency': _frequency,
+        'time': '${_time!.hour}:${_time!.minute}',
+      });
+      NotificationService.cancelAllPlantNotifications(plantId);
+      NotificationService.addPlantNotifications(
+          plantId, _frequency, _time!.hour, _time!.minute);
+    } catch (e) {
+      print('Error saving plant: $e');
+    }
   }
 
   void _identifyPlant() {

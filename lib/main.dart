@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:regapp/firebase_options.dart';
 import 'package:regapp/router/CustomNavigationHelper.dart';
+import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/styles/colorSchemes.dart';
 import 'package:regapp/styles/typography.dart';
 
@@ -11,6 +12,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   CustomNavigationHelper.instance;
+  await NotificationService.configureLocalTimeZone();
+  NotificationService.init();
   runApp(const MyApp());
 }
 

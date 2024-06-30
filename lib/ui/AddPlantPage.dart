@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
 import 'package:regapp/models/Plant.dart';
+import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
 class AddPlantPage extends StatefulWidget {
@@ -88,11 +89,22 @@ class _AddPlantPageState extends State<AddPlantPage> {
   Future<void> _savePlant() async {
     try {
       String? userId = _loggedInUser?.uid;
+      var plantCountSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('plants')
+          .count()
+          .get();
+      int? plantCount = plantCountSnapshot.count;
+      if (plantCount == null) {
+        throw Error();
+      }
       DocumentReference newPlant = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
           .collection('plants')
           .add({
+        'plantId': plantCount,
         'title': nameController.text.trim(),
         'imageUrl': '',
         'waterNeeds': volumeController.text.trim(),
@@ -113,6 +125,9 @@ class _AddPlantPageState extends State<AddPlantPage> {
           .update({
         'imageUrl': imageUrl,
       });
+
+      NotificationService.addPlantNotifications(
+          plantCount, frequency, _time.hour, _time.minute);
     } catch (e) {
       print('Error saving plant: $e');
     }
