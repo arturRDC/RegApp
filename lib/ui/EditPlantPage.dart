@@ -108,8 +108,13 @@ class _EditPlantPageState extends State<EditPlantPage> {
       });
       if (settingsProvider.notificationsEnabled) {
         NotificationService.cancelAllPlantNotifications(plantId);
-        NotificationService.addPlantNotifications(_nameController.text.trim(),
-            plantId, _frequency, _time!.hour, _time!.minute);
+        NotificationService.addPlantNotifications(
+            _nameController.text.trim(),
+            plantId,
+            _frequency,
+            _time!.hour,
+            _time!.minute,
+            NotificationService.providerToSettings(settingsProvider));
       }
     } catch (e) {
       print('Error saving plant: $e');

@@ -128,8 +128,13 @@ class _AddPlantPageState extends State<AddPlantPage> {
         'imageUrl': imageUrl,
       });
       if (settingsProvider.notificationsEnabled) {
-        NotificationService.addPlantNotifications(nameController.text.trim(),
-            plantCount, frequency, _time.hour, _time.minute);
+        NotificationService.addPlantNotifications(
+            nameController.text.trim(),
+            plantCount,
+            frequency,
+            _time.hour,
+            _time.minute,
+            NotificationService.providerToSettings(settingsProvider));
       }
     } catch (e) {
       print('Error saving plant: $e');
