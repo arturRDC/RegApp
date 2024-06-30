@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:regapp/models/Plant.dart';
 import 'package:regapp/ui/components/PlantCard.dart';
 
@@ -37,9 +38,17 @@ class _PlantListState extends State<PlantList> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const SpinKitDualRing(
+              color: Colors.green,
+              size: 50.0,
+            );
           }
-          if (snapshot.data == null) return const CircularProgressIndicator();
+          if (snapshot.data == null) {
+            return const SpinKitDualRing(
+              color: Colors.green,
+              size: 50.0,
+            );
+          }
           List<Plant> plants = snapshot.data!.docs.map((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             Plant plant = Plant(
@@ -59,13 +68,12 @@ class _PlantListState extends State<PlantList> {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return PlantCard(
-                id: plants[index].id,
-                title: plants[index].title,
-                time: plants[index].time,
-                waterNeeds: plants[index].waterNeeds.toString(),
-                location: plants[index].location,
-                imageUrl: plants[index].imageUrl
-              );
+                  id: plants[index].id,
+                  title: plants[index].title,
+                  time: plants[index].time,
+                  waterNeeds: plants[index].waterNeeds.toString(),
+                  location: plants[index].location,
+                  imageUrl: plants[index].imageUrl);
             },
           );
         });

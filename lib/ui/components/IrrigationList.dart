@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:regapp/models/Plant.dart';
 import 'package:regapp/ui/components/IrrigationCard.dart';
 
@@ -95,9 +96,17 @@ class _IrrigationListState extends State<IrrigationList> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const SpinKitDualRing(
+              color: Colors.green,
+              size: 50.0,
+            );
           }
-          if (snapshot.data == null) return const CircularProgressIndicator();
+          if (snapshot.data == null) {
+            return const SpinKitDualRing(
+              color: Colors.green,
+              size: 50.0,
+            );
+          }
           List<Plant> plants = snapshot.data!.docs.map((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             Plant plant = Plant(
