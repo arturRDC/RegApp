@@ -51,23 +51,23 @@ class NotificationService {
     return scheduledDate;
   }
 
-  static Future<void> addPlantNotifications(
-      int plantId, Set<String> frequency, int hour, minutes) async {
+  static Future<void> addPlantNotifications(String plantName, int plantId,
+      Set<String> frequency, int hour, minutes) async {
     for (var weekDay in frequency) {
       var wId = weekDayToId[weekDay]!;
       TZDateTime nextWeekDay = _getNextWeekDay(wId, hour, minutes);
       int notiId = _getNotificationId(plantId, wId);
-      await weeklyScheduleNotification(nextWeekDay, notiId);
+      await weeklyScheduleNotification(nextWeekDay, notiId, plantName);
     }
   }
 
   static Future<void> weeklyScheduleNotification(
-      TZDateTime dateTime, int notiId) async {
+      TZDateTime dateTime, int notiId, String plantName) async {
     print('Adding notification for day ${dateTime.weekday} with id $notiId');
     await _notification.zonedSchedule(
       notiId,
-      'title',
-      'body',
+      '$plantName precisa de água!',
+      'Lembre-se de regar sua planta: $plantName hoje.',
       dateTime,
       const NotificationDetails(
           android: AndroidNotificationDetails(

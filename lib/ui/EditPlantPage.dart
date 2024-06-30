@@ -103,8 +103,8 @@ class _EditPlantPageState extends State<EditPlantPage> {
         'time': '${_time!.hour}:${_time!.minute}',
       });
       NotificationService.cancelAllPlantNotifications(plantId);
-      NotificationService.addPlantNotifications(
-          plantId, _frequency, _time!.hour, _time!.minute);
+      NotificationService.addPlantNotifications(_nameController.text.trim(),
+            plantId, _frequency, _time!.hour, _time!.minute);
     } catch (e) {
       print('Error saving plant: $e');
     }

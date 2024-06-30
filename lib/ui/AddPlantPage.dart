@@ -127,7 +127,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
       });
 
       NotificationService.addPlantNotifications(
-          plantCount, frequency, _time.hour, _time.minute);
+          nameController.text.trim(),plantCount, frequency, _time.hour, _time.minute);
     } catch (e) {
       print('Error saving plant: $e');
     }
