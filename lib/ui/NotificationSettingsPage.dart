@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:regapp/providers/SettingsProvider.dart';
+import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/ui/components/SettingsItem.dart';
 import 'package:regapp/ui/components/SettingsItemRounded.dart';
 import 'package:regapp/ui/components/SwitchSettingsItem.dart';
@@ -49,6 +52,7 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -66,24 +70,37 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 padding: const EdgeInsets.only(top: 20.0),
                 child: SwitchSettingsItem(
                   title: 'Ativar notificações',
-                  onChanged: handleNotificationSetting,
-                  isEnabled: notificationsEnabled,
+                  onChanged: (value) {
+                    if (!value) {
+                      NotificationService.cancelAllNotifications();
+                    } else {
+                      NotificationService.addAllPlantNotifications();
+                    }
+                    settingsProvider.updateSettings(notifications: value);
+                  },
+                  isEnabled: settingsProvider.notificationsEnabled,
                 ),
               ),
               SwitchSettingsItem(
                 title: 'Reproduzir som',
-                onChanged: handleSoundSetting,
-                isEnabled: soundEnabled,
+                onChanged: (value) {
+                  settingsProvider.updateSettings(sound: value);
+                },
+                isEnabled: settingsProvider.soundEnabled,
               ),
               SwitchSettingsItem(
                 title: 'Vibrar',
-                onChanged: handleVibrationSetting,
+                onChanged: (value) {
+                  settingsProvider.updateSettings(vibration: value);
+                },
                 isEnabled: vibrationEnabled,
               ),
               SwitchSettingsItem(
                 title: 'Ativar Soneca',
-                onChanged: handleSnoozeSetting,
-                isEnabled: snoozeEnabled,
+                onChanged: (value) {
+                  settingsProvider.updateSettings(snooze: value);
+                },
+                isEnabled: settingsProvider.snoozeEnabled,
               ),
             ],
           ),

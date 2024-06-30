@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:regapp/firebase_options.dart';
+import 'package:regapp/providers/SettingsProvider.dart';
 import 'package:regapp/router/CustomNavigationHelper.dart';
 import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/styles/colorSchemes.dart';
@@ -14,7 +16,12 @@ void main() async {
   CustomNavigationHelper.instance;
   await NotificationService.configureLocalTimeZone();
   NotificationService.init();
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => SettingsProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

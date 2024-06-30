@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:regapp/models/Plant.dart';
+import 'package:regapp/providers/SettingsProvider.dart';
 import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
@@ -69,7 +71,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
     }
   }
 
-  void _handleSavePlant() async {
+  void _handleSavePlant(SettingsProvider settingsProvider) async {
     try {
       String imageUrl = '';
       if (pickedFile != null && pickedFile!.path != null) {
@@ -87,7 +89,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
       if (snapshot.exists) {
         plantId = snapshot.get('plantId');
         if (pickedFile == null) {
-          imageUrl = snapshot.get('ímageUrl');
+          imageUrl = snapshot.get('imageUrl');
         }
       } else {
         throw Error();
@@ -104,9 +106,11 @@ class _EditPlantPageState extends State<EditPlantPage> {
         'frequency': _frequency,
         'time': '${_time!.hour}:${_time!.minute}',
       });
-      NotificationService.cancelAllPlantNotifications(plantId);
-      NotificationService.addPlantNotifications(_nameController.text.trim(),
-          plantId, _frequency, _time!.hour, _time!.minute);
+      if (settingsProvider.notificationsEnabled) {
+        NotificationService.cancelAllPlantNotifications(plantId);
+        NotificationService.addPlantNotifications(_nameController.text.trim(),
+            plantId, _frequency, _time!.hour, _time!.minute);
+      }
     } catch (e) {
       print('Error saving plant: $e');
     }
@@ -211,6 +215,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -454,7 +459,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      _handleSavePlant();
+                      _handleSavePlant(settingsProvider);
                       context.pop();
                     },
                     child: Text(

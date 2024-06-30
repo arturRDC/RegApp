@@ -6,7 +6,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:regapp/models/Plant.dart';
+import 'package:regapp/providers/SettingsProvider.dart';
 import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/ui/components/WeekFrequencyInput.dart';
 
@@ -86,7 +88,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
     }
   }
 
-  Future<void> _savePlant() async {
+  Future<void> _savePlant(SettingsProvider settingsProvider) async {
     try {
       String? userId = _loggedInUser?.uid;
       var plantCountSnapshot = await FirebaseFirestore.instance
@@ -125,9 +127,10 @@ class _AddPlantPageState extends State<AddPlantPage> {
           .update({
         'imageUrl': imageUrl,
       });
-
-      NotificationService.addPlantNotifications(
-          nameController.text.trim(),plantCount, frequency, _time.hour, _time.minute);
+      if (settingsProvider.notificationsEnabled) {
+        NotificationService.addPlantNotifications(nameController.text.trim(),
+            plantCount, frequency, _time.hour, _time.minute);
+      }
     } catch (e) {
       print('Error saving plant: $e');
     }
@@ -151,6 +154,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -392,7 +396,7 @@ class _AddPlantPageState extends State<AddPlantPage> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      await _savePlant();
+                      await _savePlant(settingsProvider);
                       if (context.mounted) context.pop();
                     },
                     child: Text(

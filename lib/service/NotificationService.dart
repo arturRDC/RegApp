@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:regapp/models/Plant.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/standalone.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -57,7 +60,37 @@ class NotificationService {
       var wId = weekDayToId[weekDay]!;
       TZDateTime nextWeekDay = _getNextWeekDay(wId, hour, minutes);
       int notiId = _getNotificationId(plantId, wId);
+      print('adding notification $notiId for plant $plantId for weekday $wId');
       await weeklyScheduleNotification(nextWeekDay, notiId, plantName);
+    }
+  }
+
+  static Future<void> addAllPlantNotifications() async {
+    var snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection('plants')
+        .get();
+    List<Plant> plantList = [];
+
+    for (var plant in snapshot.docs) {
+      Plant plantObj = Plant(
+          id: plant.id,
+          title: plant['title'],
+          imageUrl: plant['imageUrl'],
+          waterNeeds: plant['waterNeeds'].toString(),
+          location: plant['location'],
+          frequency: Set<String>.from(plant['frequency']),
+          time: plant['time'],
+          plantId: plant['plantId']);
+      plantList.add(plantObj);
+    }
+    for (var plant in plantList) {
+      var timeParts = plant.time.split(':');
+      var hour = int.parse(timeParts[0]);
+      var minutes = int.parse(timeParts[1]);
+      await addPlantNotifications(
+          plant.title, plant.plantId!, plant.frequency, hour, minutes);
     }
   }
 
