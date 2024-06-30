@@ -86,6 +86,9 @@ class _EditPlantPageState extends State<EditPlantPage> {
       DocumentSnapshot snapshot = await plantDocRef.get();
       if (snapshot.exists) {
         plantId = snapshot.get('plantId');
+        if (pickedFile == null) {
+          imageUrl = snapshot.get('ímageUrl');
+        }
       } else {
         throw Error();
       }
@@ -93,7 +96,6 @@ class _EditPlantPageState extends State<EditPlantPage> {
       if (_time == null) {
         throw Error();
       }
-
       await plantDocRef.update({
         'title': _nameController.text.trim(),
         'imageUrl': imageUrl,
@@ -104,7 +106,7 @@ class _EditPlantPageState extends State<EditPlantPage> {
       });
       NotificationService.cancelAllPlantNotifications(plantId);
       NotificationService.addPlantNotifications(_nameController.text.trim(),
-            plantId, _frequency, _time!.hour, _time!.minute);
+          plantId, _frequency, _time!.hour, _time!.minute);
     } catch (e) {
       print('Error saving plant: $e');
     }
