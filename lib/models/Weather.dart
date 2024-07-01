@@ -1,11 +1,11 @@
 class Weather{
   final String weather;
-  final String temperature;
+  final String location;
   final String rainPct;
 
   Weather({
     required this.weather,
-    required this.temperature,
+    required this.location,
     required this.rainPct,
   });
 }
