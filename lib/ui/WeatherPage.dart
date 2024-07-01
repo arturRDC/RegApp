@@ -50,18 +50,18 @@ class _WeatherPageState extends State<WeatherPage> {
 
       print('lat: ${position.latitude} long: ${position.longitude}');
       final response = await http.get(Uri.parse(
-          'https://api.open-meteo.com/v1/forecast?latitude=${position.latitude}&longitude=${position.longitude}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,precipitation_probability'));
+          'https://api.open-meteo.com/v1/forecast?latitude=${position.latitude}&longitude=${position.longitude}&daily=weather_code,precipitation_probability_max&timezone=America%2FSao_Paulo'));
 
       print('status code: ${response.statusCode}');
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
           weatherNow = {
-            'title': getWeatherTitle(data['current_weather']['weathercode']),
+            'title': getWeatherTitle(data['daily']['weather_code'][0]),
             'location': locationName,
             'weekDay': DateTime.now().weekday.toString(),
             'rainPct':
-                data['hourly']['precipitation_probability'][0].toString(),
+                data['daily']['precipitation_probability_max'][0].toString(),
           };
           isLoading = false;
         });
