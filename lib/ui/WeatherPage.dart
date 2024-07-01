@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:regapp/ui/components/WeatherCard.dart';
 import 'package:regapp/ui/components/WeatherList.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:regapp/models/Weather.dart';
-import 'package:geolocator/geolocator.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -14,78 +14,99 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-
-  Weather weather = Weather(weather: "", temperature: "", rainPct: "");
-
-  late String lat;
-  late String long;
-
-  Future <Position> _getCurrentLocation() async {
-    bool serviceEnaled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnaled) {
-      return Future.error('Serviços de localização estão desabiilitados.');
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Permissões de localização estão permanentemente negadas, incapaz de solicitar.');
-      }
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  Future getWeather() async{
-    _getCurrentLocation().then((value) {
-      lat = '${value.latitude}';
-      long = '${value.longitude}';
-    });
-    var response = await http.get(Uri.https('api.open-meteo.com', 'v1/forecast?latitude=' + lat + '&longitude=' + long + '&current=temperature_2m,weather_code&daily=precipitation_probability_max&forecast_days=1'));
-    var jsonData = jsonDecode(response.body);
-    var currentWeather = jsonData['current'];
-    var dailyWeather = jsonData['daily'];
-    weather = Weather(weather: currentWeather['weather_code'], temperature: currentWeather['temperature_2m'], rainPct: dailyWeather['precipitation_probability_max']);
-  }
-  
   int currentPageIndex = 0;
-  final Map<String, String> weatherNow = {
-    'title': 'Ensolarado',
-    'location': 'Natal - RN',
-    'weekDay': 'Segunda',
-    'rainPct': '15'
+  Map<String, String> weatherNow = {
+    'title': '',
+    'location': '',
+    'weekDay': '',
+    'rainPct': ''
   };
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWeatherData();
+  }
+
+  Future<String> getLocationName(Position position) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+
+    Placemark placemark = placemarks[0];
+
+    String locationName =
+        '${placemark.subAdministrativeArea!} - ${placemark.isoCountryCode!}';
+    return locationName;
+  }
+
+  Future<void> fetchWeatherData() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.low);
+      String locationName = await getLocationName(position);
+
+      print('lat: ${position.latitude} long: ${position.longitude}');
+      final response = await http.get(Uri.parse(
+          'https://api.open-meteo.com/v1/forecast?latitude=${position.latitude}&longitude=${position.longitude}&current_weather=true&hourly=temperature_2m,relativehumidity_2m,precipitation_probability'));
+
+      print('status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        setState(() {
+          weatherNow = {
+            'title': getWeatherTitle(data['current_weather']['weathercode']),
+            'location': locationName,
+            'weekDay': DateTime.now().weekday.toString(),
+            'rainPct':
+                data['hourly']['precipitation_probability'][0].toString(),
+          };
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      print('Error fetching weather data: $e');
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  String getWeatherTitle(int weatherCode) {
+    if (weatherCode == 0 || weatherCode == 1) {
+      return 'Ensolarado';
+    } else if (weatherCode < 50) {
+      return 'Nublado';
+    } else {
+      return 'Chuvoso';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: FutureBuilder(
-          future: getWeather(),
-          builder:(context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Hoje', style: Theme.of(context).textTheme.headlineSmall),
-            WeatherCard(
-                title: weatherNow['title']!,
-                rainPct: weatherNow[weather.rainPct]!,
-                location: weatherNow['location']!),
-            Text('Esta semana',
-                style: Theme.of(context).textTheme.headlineSmall),
-            WeatherList(),
-          ],
-        );
-            }
-            else {
-              return Center(child: CircularProgressIndicator(),);
-            }
-            throw Exception();
-          },
-          
-        )
+        child: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Hoje',
+                      style: Theme.of(context).textTheme.headlineSmall),
+                  WeatherCard(
+                      title: weatherNow['title']!,
+                      rainPct: weatherNow['rainPct']!,
+                      location: weatherNow['location']!),
+                  Text('Esta semana',
+                      style: Theme.of(context).textTheme.headlineSmall),
+                  WeatherList(),
+                ],
+              ),
       ),
     );
   }

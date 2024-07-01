@@ -4,8 +4,6 @@ import 'package:regapp/ui/components/WeatherCard.dart';
 class WeatherList extends StatelessWidget {
   WeatherList({super.key});
 
-  
-
   final List<Map<String, String>> weatherData = [
     {
       'title': 'Chuvoso',
