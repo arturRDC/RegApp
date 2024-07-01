@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:regapp/models/Plant.dart';
+import 'package:regapp/providers/SettingsProvider.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/standalone.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -17,6 +18,16 @@ var weekDayToId = {
   'Dom': 7
 };
 
+class NotificationSettings {
+  bool notificationsEnabled = true;
+  bool soundEnabled = true;
+  bool vibrationEnabled = true;
+  NotificationSettings(
+      {required this.notificationsEnabled,
+      required this.soundEnabled,
+      required this.vibrationEnabled});
+}
+
 class NotificationService {
   static final _notification = FlutterLocalNotificationsPlugin();
 
@@ -24,6 +35,13 @@ class NotificationService {
     _notification.initialize(const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings()));
+  }
+
+  static NotificationSettings providerToSettings(SettingsProvider provider) {
+    return NotificationSettings(
+        notificationsEnabled: provider.notificationsEnabled,
+        soundEnabled: provider.soundEnabled,
+        vibrationEnabled: provider.vibrationEnabled);
   }
 
   static int _getNotificationId(int plantId, int dayOfTheWeek) {
@@ -54,18 +72,28 @@ class NotificationService {
     return scheduledDate;
   }
 
-  static Future<void> addPlantNotifications(String plantName, int plantId,
-      Set<String> frequency, int hour, minutes) async {
+  static Future<void> addPlantNotifications(
+      String plantName,
+      int plantId,
+      Set<String> frequency,
+      int hour,
+      int minutes,
+      NotificationSettings settings) async {
     for (var weekDay in frequency) {
       var wId = weekDayToId[weekDay]!;
       TZDateTime nextWeekDay = _getNextWeekDay(wId, hour, minutes);
       int notiId = _getNotificationId(plantId, wId);
       print('adding notification $notiId for plant $plantId for weekday $wId');
-      await weeklyScheduleNotification(nextWeekDay, notiId, plantName);
+      await weeklyScheduleNotification(
+          nextWeekDay, notiId, plantName, settings);
     }
   }
 
-  static Future<void> addAllPlantNotifications() async {
+  static Future<void> addAllPlantNotifications(
+      NotificationSettings settings) async {
+    if (!settings.notificationsEnabled) {
+      return;
+    }
     var snapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -89,23 +117,40 @@ class NotificationService {
       var timeParts = plant.time.split(':');
       var hour = int.parse(timeParts[0]);
       var minutes = int.parse(timeParts[1]);
-      await addPlantNotifications(
-          plant.title, plant.plantId!, plant.frequency, hour, minutes);
+      await addPlantNotifications(plant.title, plant.plantId!, plant.frequency,
+          hour, minutes, settings);
     }
   }
 
-  static Future<void> weeklyScheduleNotification(
-      TZDateTime dateTime, int notiId, String plantName) async {
+  static String _getChannelName(bool soundEnabled, bool vibrationEnabled) {
+    if (soundEnabled && vibrationEnabled) {
+      return "Som com vibração";
+    } else if (soundEnabled && !vibrationEnabled) {
+      return "Som sem vibração";
+    } else if (!soundEnabled && vibrationEnabled) {
+      return "Silencioso sem vibração";
+    } else {
+      return "Som sem vibração";
+    }
+  }
+
+  static Future<void> weeklyScheduleNotification(TZDateTime dateTime,
+      int notiId, String plantName, NotificationSettings settings) async {
     print('Adding notification for day ${dateTime.weekday} with id $notiId');
+    if (!settings.notificationsEnabled) return;
+
     await _notification.zonedSchedule(
       notiId,
       '$plantName precisa de água!',
       'Lembre-se de regar sua planta: $plantName hoje.',
       dateTime,
-      const NotificationDetails(
+      NotificationDetails(
           android: AndroidNotificationDetails(
-              'regapp_irrigations', 'Irrigações',
+              _getChannelName(settings.soundEnabled, settings.vibrationEnabled),
+              _getChannelName(settings.soundEnabled, settings.vibrationEnabled),
               channelDescription: 'Lembretes para irrigações das plantas',
+              playSound: settings.soundEnabled,
+              enableVibration: settings.vibrationEnabled,
               priority: Priority.high,
               importance: Importance.max)),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -121,20 +166,9 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation(timeZoneName));
   }
 
-  static Future<void> wateringNotification(String title, String body) async {
-    await _notification.zonedSchedule(
-        0,
-        title,
-        body,
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-                'regapp_irrigations', 'Irrigações',
-                channelDescription: 'Lembretes para irrigações das plantas',
-                priority: Priority.high,
-                importance: Importance.max)),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime);
+  static Future<void> updateNotifications(
+      NotificationSettings settingsProvider) async {
+    cancelAllNotifications();
+    addAllPlantNotifications(settingsProvider);
   }
 }

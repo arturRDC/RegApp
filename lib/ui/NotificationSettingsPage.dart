@@ -1,54 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:regapp/providers/SettingsProvider.dart';
 import 'package:regapp/service/NotificationService.dart';
-import 'package:regapp/ui/components/SettingsItem.dart';
-import 'package:regapp/ui/components/SettingsItemRounded.dart';
 import 'package:regapp/ui/components/SwitchSettingsItem.dart';
 
-class NotificationSettingsPage extends StatefulWidget {
+class NotificationSettingsPage extends StatelessWidget {
   const NotificationSettingsPage({super.key});
-
-  @override
-  State<NotificationSettingsPage> createState() =>
-      _NotificationSettingsPageState();
-}
-
-class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
-  bool notificationsEnabled = true;
-  bool soundEnabled = true;
-  bool vibrationEnabled = true;
-  bool snoozeEnabled = true;
-
-  void handleNotificationSetting(bool state) {
-    setState(() {
-      notificationsEnabled = state;
-      if (state == false) {
-        soundEnabled = false;
-        vibrationEnabled = false;
-        snoozeEnabled = false;
-      }
-    });
-  }
-
-  void handleSoundSetting(bool state) {
-    setState(() {
-      soundEnabled = state;
-    });
-  }
-
-  void handleVibrationSetting(bool state) {
-    setState(() {
-      vibrationEnabled = state;
-    });
-  }
-
-  void handleSnoozeSetting(bool state) {
-    setState(() {
-      snoozeEnabled = state;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,11 +29,16 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                   title: 'Ativar notificações',
                   onChanged: (value) {
                     if (!value) {
-                      NotificationService.cancelAllNotifications();
+                      settingsProvider.updateSettings(
+                          notifications: value, sound: false, vibration: false);
                     } else {
-                      NotificationService.addAllPlantNotifications();
+                      settingsProvider.updateSettings(notifications: value);
                     }
-                    settingsProvider.updateSettings(notifications: value);
+                    var notificationSettings =
+                        NotificationService.providerToSettings(
+                            settingsProvider);
+                    NotificationService.updateNotifications(
+                        notificationSettings);
                   },
                   isEnabled: settingsProvider.notificationsEnabled,
                 ),
@@ -85,6 +47,9 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 title: 'Reproduzir som',
                 onChanged: (value) {
                   settingsProvider.updateSettings(sound: value);
+                  var notificationSettings =
+                      NotificationService.providerToSettings(settingsProvider);
+                  NotificationService.updateNotifications(notificationSettings);
                 },
                 isEnabled: settingsProvider.soundEnabled,
               ),
@@ -92,16 +57,12 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                 title: 'Vibrar',
                 onChanged: (value) {
                   settingsProvider.updateSettings(vibration: value);
+                  var notificationSettings =
+                      NotificationService.providerToSettings(settingsProvider);
+                  NotificationService.updateNotifications(notificationSettings);
                 },
-                isEnabled: vibrationEnabled,
-              ),
-              SwitchSettingsItem(
-                title: 'Ativar Soneca',
-                onChanged: (value) {
-                  settingsProvider.updateSettings(snooze: value);
-                },
-                isEnabled: settingsProvider.snoozeEnabled,
-              ),
+                isEnabled: settingsProvider.vibrationEnabled,
+              )
             ],
           ),
         ),
