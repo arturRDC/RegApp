@@ -7,6 +7,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:regapp/models/Weather.dart';
 import 'package:regapp/ui/components/WeatherCard.dart';
 
+Map<int, String> weekDayToString = {
+  1: 'Segunda',
+  2: 'Terça',
+  3: 'Quarta',
+  4: 'Quinta',
+  5: 'Sexta',
+  6: 'Sábado',
+  7: 'Domingo'
+};
+
 class WeatherList extends StatefulWidget {
   const WeatherList({super.key});
 
@@ -44,6 +54,8 @@ class _WeatherListState extends State<WeatherList> {
 
       String locationName = await getLocationName(position);
 
+      print('lat: ${position.latitude} long: ${position.longitude}');
+
       final response = await http.get(Uri.parse(
           'https://api.open-meteo.com/v1/forecast?latitude=${position.latitude}&longitude=${position.longitude}&daily=weather_code,precipitation_probability_max&timezone=America%2FSao_Paulo'));
 
@@ -51,7 +63,7 @@ class _WeatherListState extends State<WeatherList> {
         final data = json.decode(response.body);
 
         List<Weather> newWeatherWeek = [];
-        for (var i = 0; i < 7; i++) {
+        for (var i = 1; i < 7; i++) {
           int code = data['daily']['weather_code'][i];
           int rain = data['daily']['precipitation_probability_max'][i];
           String weatherStr = getWeatherTitle(code);
@@ -101,18 +113,21 @@ class _WeatherListState extends State<WeatherList> {
 
   List<Widget> _buildPlantCards() {
     List<Widget> weatherCards = [];
+    DateTime curDay = DateTime.now().add(const Duration(days: 1));
+    String curDayStr = weekDayToString[curDay.weekday]!;
 
     for (var weather in weatherWeek) {
       weatherCards.add(
         WeatherCard(
           title: weather.weather,
           rainPct: weather.rainPct,
-          // todo add weekday
-          // weekDay: weather['weekDay']!,
+          weekDay: curDayStr,
           location: weather.location,
         ),
       );
       weatherCards.add(const SizedBox(height: 8));
+      curDay = curDay.add(const Duration(days: 1));
+      curDayStr = weekDayToString[curDay.weekday]!;
     }
 
     return weatherCards;
