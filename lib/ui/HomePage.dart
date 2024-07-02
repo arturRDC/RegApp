@@ -79,6 +79,8 @@ class _HomePageState extends State<HomePage> {
   String getWeatherTitle(int weatherCode) {
     if (weatherCode == 0 || weatherCode == 1) {
       return 'Ensolarado';
+    } else if (weatherCode == 2) {
+      return 'Parcialmente Nublado';
     } else if (weatherCode < 50) {
       return 'Nublado';
     } else {

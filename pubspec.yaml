@@ -85,6 +85,7 @@ flutter:
     - assets/icons/rainPctIcon.svg
     - assets/icons/rainyIcon.png
     - assets/icons/cloudyIcon.png
+    - assets/icons/partlyCloudyIcon.png
     - assets/icons/edit_square.svg
     - assets/images/identification_fail.png
     - assets/images/regAppLogo.png
