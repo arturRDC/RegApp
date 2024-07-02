@@ -52,7 +52,6 @@ class NotificationService {
     var firstNoti = _getNotificationId(plantId, 1);
     var lastNoti = _getNotificationId(plantId, 7);
     for (var noti = firstNoti; noti <= lastNoti; noti++) {
-      print('Cancelling notification $noti for plant $plantId');
       _notification.cancel(noti);
     }
   }
@@ -83,7 +82,6 @@ class NotificationService {
       var wId = weekDayToId[weekDay]!;
       TZDateTime nextWeekDay = _getNextWeekDay(wId, hour, minutes);
       int notiId = _getNotificationId(plantId, wId);
-      print('adding notification $notiId for plant $plantId for weekday $wId');
       await weeklyScheduleNotification(
           nextWeekDay, notiId, plantName, settings);
     }
@@ -136,7 +134,6 @@ class NotificationService {
 
   static Future<void> weeklyScheduleNotification(TZDateTime dateTime,
       int notiId, String plantName, NotificationSettings settings) async {
-    print('Adding notification for day ${dateTime.weekday} with id $notiId');
     if (!settings.notificationsEnabled) return;
 
     await _notification.zonedSchedule(

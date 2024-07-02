@@ -54,7 +54,6 @@ class _WeatherListState extends State<WeatherList> {
 
       String locationName = await getLocationName(position);
 
-      print('lat: ${position.latitude} long: ${position.longitude}');
 
       final response = await http.get(Uri.parse(
           'https://api.open-meteo.com/v1/forecast?latitude=${position.latitude}&longitude=${position.longitude}&daily=weather_code,precipitation_probability_max&timezone=America%2FSao_Paulo'));

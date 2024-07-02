@@ -91,26 +91,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           ),
                         ),
                       ),
-                      /*TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Verification()));
-                        },
-                        child: Text(
-                          'Eu tenho um código de acesso',
-                          style:
-                              Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: const Color.fromRGBO(75, 119, 30, 1),
-                                    fontWeight: FontWeight.w600,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor:
-                                        const Color.fromRGBO(75, 119, 30, 1),
-                                    decorationThickness: 2,
-                                  ),
-                        ),
-                      ),*/
                     ],
                   ),
                 ],
