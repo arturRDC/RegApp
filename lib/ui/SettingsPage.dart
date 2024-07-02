@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/ui/components/SettingsItem.dart';
 import 'package:regapp/ui/components/SettingsItemRounded.dart';
 
@@ -99,6 +100,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _logout() async {
     FirebaseAuth.instance.signOut();
+    NotificationService.cancelAllNotifications();
     context.go('/login');
   }
 }

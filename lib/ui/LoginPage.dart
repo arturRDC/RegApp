@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:regapp/service/NotificationService.dart';
 import 'package:regapp/ui/CreateAccountPage.dart';
 import 'package:regapp/ui/ResetPasswordPage.dart';
 
@@ -18,19 +19,24 @@ class _LoginState extends State<Login> {
   void _login(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim());
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
       if (context.mounted) {
+        NotificationService.updateNotifications(NotificationSettings(
+            notificationsEnabled: true,
+            soundEnabled: true,
+            vibrationEnabled: true));
         context.go('/home');
       }
-    } on FirebaseAuthException catch(e){
+    } on FirebaseAuthException catch (e) {
       print(e);
-      showDialog(context: context, 
-      builder: (context){
-        return AlertDialog(
-          content: Text(e.message.toString()),
-          );
-      });
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(e.message.toString()),
+            );
+          });
     }
   }
 
