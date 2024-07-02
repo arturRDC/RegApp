@@ -86,6 +86,11 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  String _capitalize(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1).toLowerCase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final currentTime = DateTime.now();
@@ -94,11 +99,11 @@ class _HomePageState extends State<HomePage> {
     String greeting;
 
     if (currentHour < 12) {
-      greeting = 'Bom Dia';
+      greeting = 'Bom dia';
     } else if (currentHour < 18) {
-      greeting = 'Boa Tarde';
+      greeting = 'Boa tarde';
     } else {
-      greeting = 'Boa Noite';
+      greeting = 'Boa noite';
     }
 
     String? user = FirebaseAuth.instance.currentUser?.displayName;
@@ -111,7 +116,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '$greeting, $user',
+              '$greeting, ${_capitalize(user!)}',
               style: Theme.of(context).textTheme.headlineLarge,
             ),
             Padding(
