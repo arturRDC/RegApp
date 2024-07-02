@@ -30,7 +30,7 @@ final textTheme = TextTheme(
   ),
   headlineSmall: GoogleFonts.roboto(
     fontWeight: FontWeight.w400,
-    fontSize: 24,
+    fontSize: 22,
     height: 32 / 24,
   ),
   titleLarge: GoogleFonts.roboto(
