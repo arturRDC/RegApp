@@ -79,7 +79,7 @@ class _WeatherPageState extends State<WeatherPage> {
     if (weatherCode == 0 || weatherCode == 1) {
       return 'Ensolarado';
     } else if (weatherCode == 2) {
-      return 'Parcialmente Nublado';
+      return 'Meio Nublado';
     } else if (weatherCode < 50) {
       return 'Nublado';
     } else {

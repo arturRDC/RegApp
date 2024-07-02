@@ -18,7 +18,7 @@ class WeatherCard extends StatelessWidget {
     switch (title) {
       case 'Ensolarado':
         return 'assets/icons/sunnyIcon.png';
-      case 'Parcialmente Nublado':
+      case 'Meio Nublado':
         return 'assets/icons/partlyCloudyIcon.png';
       case 'Chuvoso':
         return 'assets/icons/rainyIcon.png';
